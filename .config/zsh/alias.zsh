@@ -58,6 +58,10 @@ fi
 # alias juicebox="java -jar /opt/juicebox.jar"
 if command -v aichat &>/dev/null; then
   alias ai="aichat"
+  if [[ -d $HOME/.config/aichat ]]; then
+    mkdir $HOME/.config/aichat
+    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+  fi
 fi
 
 proxy_port=2080
