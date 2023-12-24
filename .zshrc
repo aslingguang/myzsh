@@ -98,6 +98,7 @@ system_info=$(uname -a)
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
 # [[ ! -f /opt/miniconda/etc/profile.d/conda.sh ]] || source /opt/miniconda/etc/profile.d/conda.sh
+
 # 命令别名
 [[ ! -f $HOME/.config/zsh/alias.zsh ]] || source $HOME/.config/zsh/alias.zsh 
 
