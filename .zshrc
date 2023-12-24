@@ -135,12 +135,14 @@ update_config()
   fi  
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
-
-  if [[ ! -d $HOME/.config/aichat ]]; then
-    mkdir -p $HOME/.config/aichat
+  
+  if command -v aichat &>/dev/null; then
+    if [[ ! -d $HOME/.config/aichat ]]; then
+      mkdir -p $HOME/.config/aichat
+    fi
+    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
-
+  
   # 如果是安卓设备，更新termux配置
   if [[ $system_info == *Android* ]]; then
     if [[ ! -d $HOME/.termux ]]; then
