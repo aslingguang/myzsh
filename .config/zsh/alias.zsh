@@ -1,11 +1,11 @@
 # 命令快捷方式
-if command -v exa &>/dev/null; then
-  alias ls='exa'
-  alias l='exa -lbah --icons'
-  alias la='exa -labgh --icons'
-  alias ll='exa -lbg --icons'
-  alias lsa='exa -lbagR --icons'
-  alias lst='exa -lTabgh --icons' # 输入lst,将展示类似于tree的树状列表。
+if command -v eza &>/dev/null; then
+  alias ls='eza'
+  alias l='eza -lbah --icons'
+  alias la='eza -labgh --icons'
+  alias ll='eza -lbg --icons'
+  alias lsa='eza -lbagR --icons'
+  alias lst='eza -lTabgh --icons' # 输入lst,将展示类似于tree的树状列表。
 else 
   alias ls='ls --color=auto'
   alias lst='tree -pCsh'
@@ -33,7 +33,7 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
 alias mk="mkdir"
-
+alias cls="clear"
 # alias cd="z"
 
 # alias xlsx="(xlsx2csv '$1') | xsv table | bat -ltsv --color=always "
@@ -42,6 +42,11 @@ alias mk="mkdir"
 # 应用快捷方式
 # alias cursor="/opt/Cursor-0.1.6.AppImage &>/dev/null &"
 # alias linuxqq="linuxqq &>/dev/null &"
+
+if command -v pacseek &>/dev/null; then
+  alias pk="pacseek"
+fi
+
 if command -v dbeaver &>/dev/null; then
   alias dbeaver="dbeaver &>/dev/null &"
 fi
@@ -63,6 +68,11 @@ if command -v aichat &>/dev/null; then
   if [[ ! -d $HOME/.config/aichat ]]; then
     mkdir -p $HOME/.config/aichat
   fi
+  if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
+      echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+  fi
+elif [[ -f "$HOME/.config/aichat/aichat" ]]; then
+  alias ai="$HOME/.config/aichat/aichat"
   if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
       echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
