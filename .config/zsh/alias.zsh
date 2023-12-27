@@ -17,6 +17,12 @@ fi
 
 if command -v bat &>/dev/null; then
   alias cat='bat -pp'
+  if [[ ! -d $HOME/.config/bat ]]; then
+    mkdir -p $HOME/.config/bat
+  fi
+  if [[ ! -f $HOME/.config/bat/config ]]; then
+      echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+  fi
 fi
 
 if command -v nvim &>/dev/null; then

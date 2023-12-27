@@ -129,6 +129,7 @@ update_config()
 {
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
+  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 
   if [[ ! -d $HOME/.config/zsh ]]; then
     mkdir -p $HOME/.config/zsh
@@ -136,6 +137,13 @@ update_config()
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
   
+  if command -v bat &>/dev/null; then
+    if [[ ! -d $HOME/.config/bat ]]; then
+      mkdir -p $HOME/.config/bat
+    fi
+    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+  fi
+
   if command -v aichat &>/dev/null; then
     if [[ ! -d $HOME/.config/aichat ]]; then
       mkdir -p $HOME/.config/aichat
@@ -150,6 +158,7 @@ update_config()
     fi 
     echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   fi
+
 }
 
 remove_config()
@@ -158,12 +167,20 @@ remove_config()
     rm -rf $HOME/.config/zsh
   fi
 
+  if [[ -d $HOME/.config/bat ]]; then
+    rm -rf $HOME/.config/bat
+  fi
+
   if [[ -f $HOME/.tldr_sources ]]; then
     rm -f $HOME/.tldr_sources
   fi
 
   if [[ -f $HOME/.p10k.zsh ]]; then
     rm -f $HOME/.p10k.zsh
+  fi
+
+  if [[ -f $HOME/.gitconfig ]]; then
+      rm -f $HOME/.gitconfig
   fi
 
   if [[ -f $HOME/.zshrc ]]; then
