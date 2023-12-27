@@ -47,8 +47,8 @@ zinit light-mode for \
 
 # Lines configured by zsh-newuser-install
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=5000
+SAVEHIST=5000
 # End of lines configured by zsh-newuser-install
 
 
@@ -80,6 +80,10 @@ fi
 if [[ ! -f $HOME/.p10k.zsh ]]; then
   echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
 fi  
+
+if [[ ! -f $HOME/.gitconfig ]]; then  
+  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+fi
 
 if [[ ! -d $HOME/.config/zsh ]]; then
   mkdir -p $HOME/.config/zsh

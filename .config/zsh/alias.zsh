@@ -15,6 +15,21 @@ else
   alias lsa='ls -lah'
 fi
 
+if command -v git &>/dev/null; then
+  alias gi="git init"
+  alias gs="git status"
+  alias ga="git add"
+  alias gc="git clone"
+  alias gm="git commint -m"
+  alias go="git checkout"
+  alias gp="git push"
+  alias gpo="git push origin"
+  alias gd="git diff"
+  alias gr="git remote add"
+  alias gro="git remote add origin"
+  alias gl="git log"
+fi
+
 if command -v bat &>/dev/null; then
   alias cat='bat -pp'
   if [[ ! -d $HOME/.config/bat ]]; then
