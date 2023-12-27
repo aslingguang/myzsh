@@ -1,0 +1,47 @@
+[user]
+	name = 
+	email = 
+[core]
+	filemode = false
+	autocrlf = input
+	pager = delta
+[safe]
+	directory = /mnt/e
+[init]
+	defaultBranch = main
+
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    features = side-by-side line-numbers decorations #Coldark-Dark  
+	navigate = true    # 使用n和N在不同的部分之间移动
+    light = false      # 如果你的终端背景色是浅色（例如默认的 macOS 终端），则设置为 true。
+	# line-numbers-left-format = │{nm:^4}│
+	# line-numbers-right-format = │{np:^4}│
+	# syntax-theme = Dracula
+	# plus-style = syntax "#003800"
+    # minus-style = syntax "#3f0001"
+[merge]
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
+
+[delta "line-numbers"]
+    line-numbers-left-style = cyan
+    line-numbers-right-style = cyan
+	line-numbers-zero-style = cyan
+    line-numbers-minus-style = 124
+    line-numbers-plus-style = 28
+
+
+[delta "decorations"]
+    commit-decoration-style = bold cyan box ul # git cog 的commint显示行线
+	file-style = omit  
+	# commit-style = raw
+    # file-decoration-style = none
+	hunk-header-file-style = red
+	hunk-header-line-number-style = "#067a00" # "#067a00"为绿色，cyan为浅蓝色
+    hunk-header-decoration-style = cyan box ul
+	hunk-header-style = file line-number syntax
