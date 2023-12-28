@@ -1,6 +1,7 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -13,26 +14,30 @@ if command -v nvim &>/dev/null; then
   fi
 fi
 
-# install zinit
-ZINIT_HOME="${ZINIT_HOME:-${XDG_DATA_HOME:-${HOME}/.local/share}/zinit}"
-if [ ! -d "${ZINIT_HOME}" ]; then
-  bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+
+if [[ -d "/opt" ]]; then
+  ZINIT_HOME_DIR="/opt/zsh"
+else
+  ZINIT_HOME_DIR="$HOME/.local/share"
 fi
+typeset -A ZINIT=(
+    BIN_DIR  $ZINIT_HOME_DIR/zinit/zinit.git
+    HOME_DIR $ZINIT_HOME_DIR/zinit
+    PLUGINS_DIR $ZINIT_HOME_DIR/zinit/plugins
+    COMPLETIONS_DIR $ZINIT_HOME_DIR/zinit/completions
+    SNIPPETS_DIR $ZINIT_HOME_DIR/zinit/snippets
+    # COMPINIT_OPTS -C
+)
 
+ZPFX="$ZINIT_HOME_DIR/zinit/polaris"
+[ ! -d ${ZINIT[BIN_DIR]} ] && mkdir -p "$(dirname ${ZINIT[BIN_DIR]})"
+[ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
+source "${ZINIT[BIN_DIR]}/zinit.zsh"
 
-
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-  print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-  command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-  command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-    print -P "%F{33} %F{34}Installation successful.%f%b" || \
-    print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
+
+
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -99,9 +104,8 @@ fi
 
 system_info=$(uname -a)
 
+# p10k主题
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
-
-# [[ ! -f /opt/miniconda/etc/profile.d/conda.sh ]] || source /opt/miniconda/etc/profile.d/conda.sh
 
 # 命令别名
 [[ ! -f $HOME/.config/zsh/alias.zsh ]] || source $HOME/.config/zsh/alias.zsh 
@@ -205,7 +209,7 @@ remove_config()
   echo "是否删除zint插件 (y/n): "
   read choice
   if [[ $choice == "y" || $choice == "Y" ]]; then
-    rm -rf ${ZINIT_HOME}
+    rm -rf ${ZINIT[HOME_DIR]}
     echo "删除zint插件"
   else
     echo "保留zint插件"
@@ -223,3 +227,5 @@ remove_config()
   fi
   
 }
+
+
