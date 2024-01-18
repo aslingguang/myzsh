@@ -51,10 +51,7 @@ fi
 
 # tldr清华源
 #export TLDR_SOURCE="https://mirror.tuna.tsinghua.edu.cn/tldr-pages/tldr"
-if command -v tldr &>/dev/null; then
-  if [[ ! -f $HOME/.tldr_sources ]]; then
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.tldr_sources)" > $HOME/.tldr_sources
-  fi  
+if command -v tldr &>/dev/null; then  
   export TLDR_SOURCE_PATHS="$HOME/.tldr_sources"
 fi  
 

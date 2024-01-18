@@ -95,6 +95,8 @@ fi
 
 # source /home/lingguang/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 
+
+# 下载配置文件
 githubraw_url=https://raw.githubusercontent.com
 githubraw_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://raw.githubusercontent.com)
 if [ $githubraw_response_code -ne 200 ]; then
@@ -104,6 +106,7 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc
+
 if [[ ! -f $HOME/.p10k.zsh ]]; then
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
 fi  
@@ -111,6 +114,12 @@ fi
 if [[ ! -f $HOME/.gitconfig ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 fi
+
+if command -v tldr &>/dev/null; then
+  if [[ ! -f $HOME/.tldr_sources ]]; then
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.tldr_sources)" > $HOME/.tldr_sources
+  fi  
+fi  
 
 if [[ ! -d $HOME/.config/zsh ]]; then
   mkdir -p $HOME/.config/zsh
@@ -133,7 +142,8 @@ if command -v bat &>/dev/null; then
   fi
 fi
 
-if command -v aichat &>/dev/null; then
+
+if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
   if [[ ! -d $HOME/.config/aichat ]]; then
     mkdir -p $HOME/.config/aichat
   fi
@@ -178,6 +188,12 @@ update_config()
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+
+  if command -v tldr &>/dev/null; then
+    if [[ ! -f $HOME/.tldr_sources ]]; then
+      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.tldr_sources)" > $HOME/.tldr_sources
+    fi  
+  fi  
 
   if [[ ! -d $HOME/.config/zsh ]]; then
     mkdir -p $HOME/.config/zsh

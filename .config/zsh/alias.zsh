@@ -34,12 +34,6 @@ fi
 
 if command -v bat &>/dev/null; then
   alias cat='bat -pp'
-  if [[ ! -d $HOME/.config/bat ]]; then
-    mkdir -p $HOME/.config/bat
-  fi
-  if [[ ! -f $HOME/.config/bat/config ]]; then
-      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
-  fi
 fi
 
 if command -v nvim &>/dev/null; then
@@ -90,17 +84,8 @@ fi
 # alias juicebox="java -jar /opt/juicebox.jar"
 if command -v aichat &>/dev/null; then
   alias ai="aichat"
-  if [[ ! -d $HOME/.config/aichat ]]; then
-    mkdir -p $HOME/.config/aichat
-  fi
-  if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
-  fi
 elif [[ -f "$HOME/.config/aichat/aichat" ]]; then
   alias ai="$HOME/.config/aichat/aichat"
-  if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
-  fi
 fi
 
 proxy_port=2080
