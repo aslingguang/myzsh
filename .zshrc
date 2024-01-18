@@ -7,18 +7,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
+github_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
 
 github_mirror_url=https://hub.yzuu.cf
+
+if [ $github_response_code -ne 200 ]; then
+  git config --global url."https://hub.yzuu.cf/".insteadOf "https://github.com/"
+fi
+
 if command -v nvim &>/dev/null; then
   # install MyVim-starter
   NVIM_HOME="${NVIM_HOME:-${HOME}/.config/nvim}"
   if [ ! -d "${NVIM_HOME}" ]; then
-    if [ $response_code -eq 200 ]; then
-      git clone https://github.com/aslingguang/MyVim-starter.git "${NVIM_HOME}"
-    else
-      git clone ${github_mirror_url}/aslingguang/MyVim-starter.git "${NVIM_HOME}"
-    fi
+    git clone https://github.com/aslingguang/MyVim-starter.git "${NVIM_HOME}"
   fi
 fi
 
@@ -39,11 +40,7 @@ typeset -A ZINIT=(
 
 ZPFX="$ZINIT_HOME_DIR/zinit/polaris"
 [ ! -d ${ZINIT[BIN_DIR]} ] && mkdir -p "$(dirname ${ZINIT[BIN_DIR]})"
-if [ $response_code -eq 200 ]; then
-  [ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
-else
-  [ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone ${github_mirror_url}/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
-fi
+[ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
 source "${ZINIT[BIN_DIR]}/zinit.zsh"
 
 autoload -Uz _zinit
@@ -53,20 +50,12 @@ autoload -Uz _zinit
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
-if [ $response_code -eq 200 ]; then
   zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
-else
-  zinit ice svn
-  zinit for \
-    ${github_mirror_url}/zdharma-continuum/zinit-annex-as-monitor \
-    ${github_mirror_url}/zdharma-continuum/zinit-annex-bin-gem-node \
-    ${github_mirror_url}/zdharma-continuum/zinit-annex-patch-dl \
-    ${github_mirror_url}/zdharma-continuum/zinit-annex-rust
-fi
+
 ### End of Zinit's installer chunk
 
 
@@ -77,67 +66,50 @@ SAVEHIST=5000
 # End of lines configured by zsh-newuser-install
 
 
-if [ $response_code -eq 200 ]; then
-  # 加载 powerlevel10k 主题
-  zinit ice depth=1; zinit load romkatv/powerlevel10k
 
-  if command -v fzf &>/dev/null; then
-    zinit ice lucid wait='1'
-    zinit load aslingguang/fzf-tab-source
-  fi
+# 加载 powerlevel10k 主题
+zinit ice depth=1; zinit load romkatv/powerlevel10k
 
-  #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
+if command -v fzf &>/dev/null; then
   zinit ice lucid wait='1'
-  zinit load agkozak/zsh-z
-  # zinit load skywind3000/z.lua
-
-  # zinit light zsh-users/zsh-completions
-  zinit load zsh-users/zsh-autosuggestions
-  zinit load zdharma/fast-syntax-highlighting
-  # zinit light zsh-users/zsh-syntax-highlighting
-  zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-    zsh-users/zsh-completions
-
-else
-  # 加载 powerlevel10k 主题
-  zinit ice depth=1 svn
-  zinit snippet ${github_mirror_url}/romkatv/powerlevel10k
-
-  if command -v fzf &>/dev/null; then
-    zinit ice lucid wait='1' svn
-    zinit snippet ${github_mirror_url}/aslingguang/fzf-tab-source
-  fi
-
-  #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
-  zinit ice lucid wait='1' svn
-  zinit snippet ${github_mirror_url}/agkozak/zsh-z
-  # zinit load skywind3000/z.lua
-
-  # zinit light zsh-users/zsh-completions
-  zinit ice svn
-  zinit for \
-  ${github_mirror_url}/zsh-users/zsh-autosuggestions \
-  ${github_mirror_url}/zdharma/fast-syntax-highlighting
-  # zinit light zsh-users/zsh-syntax-highlighting
-
-  zinit ice svn
-  zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-    ${github_mirror_url}/zsh-users/zsh-completions
+  zinit load aslingguang/fzf-tab-source
 fi
 
+#记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
+zinit ice lucid wait='1'
+zinit load agkozak/zsh-z
+# zinit load skywind3000/z.lua
 
+# zinit light zsh-users/zsh-completions
+zinit load zsh-users/zsh-autosuggestions
+zinit load zdharma/fast-syntax-highlighting
+# zinit light zsh-users/zsh-syntax-highlighting
+zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+  zsh-users/zsh-completions
+
+
+
+if [ $github_response_code -ne 200 ]; then
+  git config --global --unset-all url."https://hub.yzuu.cf/".insteadOf
+fi
 
 # source /home/lingguang/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 
+githubraw_url=https://raw.githubusercontent.com
+githubraw_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://raw.githubusercontent.com)
+if [ $githubraw_response_code -ne 200 ]; then
+  githubraw_url=https://raw.gitmirror.com
+  # githubraw_url=https://raw.fgit.cf/
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc
 if [[ ! -f $HOME/.p10k.zsh ]]; then
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
 fi  
 
 if [[ ! -f $HOME/.gitconfig ]]; then  
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 fi
 
 if [[ ! -d $HOME/.config/zsh ]]; then
@@ -145,11 +117,29 @@ if [[ ! -d $HOME/.config/zsh ]]; then
 fi  
 
 if [[ ! -f $HOME/.config/zsh/alias.zsh ]]; then  
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
 fi
 
 if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then  
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+fi
+
+if command -v bat &>/dev/null; then
+  if [[ ! -d $HOME/.config/bat ]]; then
+    mkdir -p $HOME/.config/bat
+  fi
+  if [[ ! -f $HOME/.config/bat/config ]]; then
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+  fi
+fi
+
+if command -v aichat &>/dev/null; then
+  if [[ ! -d $HOME/.config/aichat ]]; then
+    mkdir -p $HOME/.config/aichat
+  fi
+  if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+  fi
 fi
 
 system_info=$(uname -a)
@@ -172,9 +162,9 @@ if [[ $system_info == *Android* ]]; then
 
   if [[ ! -f $HOME/.termux/termux.properties.bak && -f $HOME/.termux/termux.properties ]]; then
     mv $HOME/.termux/termux.properties $HOME/.termux/termux.properties.bak
-    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   elif [[ ! -f $HOME/.termux/termux.properties ]]; then
-    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   fi
 
   if command -v sshd &>/dev/null; then
@@ -185,28 +175,28 @@ fi
 
 update_config()
 {
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 
   if [[ ! -d $HOME/.config/zsh ]]; then
     mkdir -p $HOME/.config/zsh
   fi  
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
-  echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
   
   if command -v bat &>/dev/null; then
     if [[ ! -d $HOME/.config/bat ]]; then
       mkdir -p $HOME/.config/bat
     fi
-    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
   fi
 
   if command -v aichat &>/dev/null; then
     if [[ ! -d $HOME/.config/aichat ]]; then
       mkdir -p $HOME/.config/aichat
     fi
-    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
   
   # 如果是安卓设备，更新termux配置
@@ -214,7 +204,7 @@ update_config()
     if [[ ! -d $HOME/.termux ]]; then
       mkdir -p $HOME/.termux   
     fi 
-    echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   fi
 
 }
@@ -278,4 +268,5 @@ remove_config()
   
 }
 
-
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
