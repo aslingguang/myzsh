@@ -38,7 +38,7 @@ if command -v bat &>/dev/null; then
     mkdir -p $HOME/.config/bat
   fi
   if [[ ! -f $HOME/.config/bat/config ]]; then
-      echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
   fi
 fi
 
@@ -50,6 +50,8 @@ if command -v xclip &>/dev/null; then
   alias copy="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
   alias cout="tee /dev/tty  | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
 fi
+
+alias ..='cd ..' 
 alias ...='cd ../..' 
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
@@ -92,12 +94,12 @@ if command -v aichat &>/dev/null; then
     mkdir -p $HOME/.config/aichat
   fi
   if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-      echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
 elif [[ -f "$HOME/.config/aichat/aichat" ]]; then
   alias ai="$HOME/.config/aichat/aichat"
   if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-      echo "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
 fi
 
