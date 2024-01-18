@@ -6,11 +6,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
+response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
+
+github_mirror_url=https://hub.yzuu.cf
 if command -v nvim &>/dev/null; then
   # install MyVim-starter
   NVIM_HOME="${NVIM_HOME:-${HOME}/.config/nvim}"
   if [ ! -d "${NVIM_HOME}" ]; then
-    git clone https://github.com/aslingguang/MyVim-starter.git "${NVIM_HOME}"
+    if [ $response_code -eq 200 ]; then
+      git clone https://github.com/aslingguang/MyVim-starter.git "${NVIM_HOME}"
+    else
+      git clone ${github_mirror_url}/aslingguang/MyVim-starter.git "${NVIM_HOME}"
+    fi
   fi
 fi
 
@@ -26,12 +34,16 @@ typeset -A ZINIT=(
     PLUGINS_DIR $ZINIT_HOME_DIR/zinit/plugins
     COMPLETIONS_DIR $ZINIT_HOME_DIR/zinit/completions
     SNIPPETS_DIR $ZINIT_HOME_DIR/zinit/snippets
-    # COMPINIT_OPTS -C
+    COMPINIT_OPTS -C
 )
 
 ZPFX="$ZINIT_HOME_DIR/zinit/polaris"
 [ ! -d ${ZINIT[BIN_DIR]} ] && mkdir -p "$(dirname ${ZINIT[BIN_DIR]})"
-[ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
+if [ $response_code -eq 200 ]; then
+  [ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
+else
+  [ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone ${github_mirror_url}/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
+fi
 source "${ZINIT[BIN_DIR]}/zinit.zsh"
 
 autoload -Uz _zinit
@@ -41,12 +53,20 @@ autoload -Uz _zinit
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
-zinit light-mode for \
-  zdharma-continuum/zinit-annex-as-monitor \
-  zdharma-continuum/zinit-annex-bin-gem-node \
-  zdharma-continuum/zinit-annex-patch-dl \
-  zdharma-continuum/zinit-annex-rust
-
+if [ $response_code -eq 200 ]; then
+  zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+else
+  zinit ice svn
+  zinit for \
+    ${github_mirror_url}/zdharma-continuum/zinit-annex-as-monitor \
+    ${github_mirror_url}/zdharma-continuum/zinit-annex-bin-gem-node \
+    ${github_mirror_url}/zdharma-continuum/zinit-annex-patch-dl \
+    ${github_mirror_url}/zdharma-continuum/zinit-annex-rust
+fi
 ### End of Zinit's installer chunk
 
 
@@ -57,27 +77,57 @@ SAVEHIST=5000
 # End of lines configured by zsh-newuser-install
 
 
+if [ $response_code -eq 200 ]; then
+  # 加载 powerlevel10k 主题
+  zinit ice depth=1; zinit load romkatv/powerlevel10k
 
-# 加载 powerlevel10k 主题
-zinit ice depth=1; zinit load romkatv/powerlevel10k
+  if command -v fzf &>/dev/null; then
+    zinit ice lucid wait='1'
+    zinit load aslingguang/fzf-tab-source
+  fi
 
-#记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
-zinit ice lucid wait='1'
-zinit load agkozak/zsh-z
-
-# zinit light zsh-users/zsh-completions
-zinit load zsh-users/zsh-autosuggestions
-zinit load zdharma/fast-syntax-highlighting
-# zinit light zsh-users/zsh-syntax-highlighting
-zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-  zsh-users/zsh-completions
-
-if command -v fzf &>/dev/null; then
+  #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
   zinit ice lucid wait='1'
-  zinit load aslingguang/fzf-tab-source
+  zinit load agkozak/zsh-z
+  # zinit load skywind3000/z.lua
+
+  # zinit light zsh-users/zsh-completions
+  zinit load zsh-users/zsh-autosuggestions
+  zinit load zdharma/fast-syntax-highlighting
+  # zinit light zsh-users/zsh-syntax-highlighting
+  zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+    zsh-users/zsh-completions
+
+else
+  # 加载 powerlevel10k 主题
+  zinit ice depth=1 svn
+  zinit snippet ${github_mirror_url}/romkatv/powerlevel10k
+
+  if command -v fzf &>/dev/null; then
+    zinit ice lucid wait='1' svn
+    zinit snippet ${github_mirror_url}/aslingguang/fzf-tab-source
+  fi
+
+  #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
+  zinit ice lucid wait='1' svn
+  zinit snippet ${github_mirror_url}/agkozak/zsh-z
+  # zinit load skywind3000/z.lua
+
+  # zinit light zsh-users/zsh-completions
+  zinit ice svn
+  zinit for \
+  ${github_mirror_url}/zsh-users/zsh-autosuggestions \
+  ${github_mirror_url}/zdharma/fast-syntax-highlighting
+  # zinit light zsh-users/zsh-syntax-highlighting
+
+  zinit ice svn
+  zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+    ${github_mirror_url}/zsh-users/zsh-completions
 fi
 
-# source /home/lingguang/all/code/gitLib/fzf-tab-source/fzf-tab.plugin.zsh
+
+
+# source /home/lingguang/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
