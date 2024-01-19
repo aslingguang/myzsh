@@ -102,13 +102,21 @@ if command -v trans &>/dev/null; then
 fi
 
 if command -v mount.davfs &>/dev/null; then
-  alias onedrive="mount.davfs https://app.koofr.net/dav/OneDrive/  /mnt/onedrive"
+  alias mount_onedrive="mount.davfs https://app.koofr.net/dav/OneDrive/  /mnt/onedrive"
+fi
+
+if command -v reflector &>/dev/null; then
+  alias update="sudo reflector --verbose --country 'China' -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist"
+fi
+
+if command -v git &>/dev/null; then
+  alias set_git_url="git config --global url."${github_mirror_url}".insteadOf "https://github.com/""
+  alias unset_git_url="git config --global --unset-all url."${github_mirror_url}".insteadOf"
 fi
 
 # windows
 if [[ $system_info == *WSL* ]]; then
   alias addip="powershell.exe -command 'netsh interface ip add address \"vEthernet (WSL)\" 192.168.0.1 255.255.255.0'"
-  alias update="sudo reflector --verbose --country 'China' -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist"
   alias utools="/mnt/c/Users/LINGGUANG/AppData/Local/Programs/utools/uTools.exe"
 
   alias cmd="cmd.exe"
@@ -129,10 +137,6 @@ if command -v thefuck &>/dev/null; then
   eval $(thefuck --alias)
 fi  
 
-# 
-# alias fts='/home/lingguang/all/code/gitLib/fzf-tab-source/fts-auto.sh'
-# fzf-tab配置
-# source /home/lingguang/all/code/gitLib/fzf-tab-source/fzf-tab.plugin.zsh
 
 
 

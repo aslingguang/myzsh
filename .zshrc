@@ -12,7 +12,7 @@ github_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https
 github_mirror_url=https://hub.yzuu.cf
 
 if [ $github_response_code -ne 200 ]; then
-  git config --global url."https://hub.yzuu.cf/".insteadOf "https://github.com/"
+  git config --global url."${github_mirror_url}".insteadOf "https://github.com/"
 fi
 
 if command -v nvim &>/dev/null; then
@@ -83,7 +83,7 @@ if command -v fzf &>/dev/null; then
 fi
 
 #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
-zinit ice lucid wait='1' atload"[[ $github_response_code -eq 200 ]] || git config --global --unset-all url."https://hub.yzuu.cf/".insteadOf"
+zinit ice lucid wait='1' atload"[[ $github_response_code -eq 200 ]] || git config --global --unset-all url."${github_mirror_url}".insteadOf"
 zinit load agkozak/zsh-z
 # zinit load skywind3000/z.lua
 
@@ -203,7 +203,7 @@ update_config()
     echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
   fi
 
-  if command -v aichat &>/dev/null; then
+  if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
     if [[ ! -d $HOME/.config/aichat ]]; then
       mkdir -p $HOME/.config/aichat
     fi

@@ -15,4 +15,4 @@
 --map-syntax "*.ino:C++"
 
 # 使用使用有颜色输出(默认输出到管道无颜色)
- --color=always
+ --color=auto
