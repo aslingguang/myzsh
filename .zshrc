@@ -70,16 +70,6 @@ SAVEHIST=5000
 # 加载 powerlevel10k 主题
 zinit ice depth=1; zinit load romkatv/powerlevel10k
 
-if command -v fzf &>/dev/null; then
-  zinit ice lucid wait='1'
-  zinit load aslingguang/fzf-tab-source
-fi
-
-#记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
-zinit ice lucid wait='1'
-zinit load agkozak/zsh-z
-# zinit load skywind3000/z.lua
-
 # zinit light zsh-users/zsh-completions
 zinit load zsh-users/zsh-autosuggestions
 zinit load zdharma/fast-syntax-highlighting
@@ -87,11 +77,16 @@ zinit load zdharma/fast-syntax-highlighting
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
   zsh-users/zsh-completions
 
-
-
-if [ $github_response_code -ne 200 ]; then
-  git config --global --unset-all url."https://hub.yzuu.cf/".insteadOf
+if command -v fzf &>/dev/null; then
+  zinit ice lucid wait='1'
+  zinit load aslingguang/fzf-tab-source
 fi
+
+#记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
+zinit ice lucid wait='1' atload"[[ $github_response_code -eq 200 ]] || git config --global --unset-all url."https://hub.yzuu.cf/".insteadOf"
+zinit load agkozak/zsh-z
+# zinit load skywind3000/z.lua
+
 
 # source /home/lingguang/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 
