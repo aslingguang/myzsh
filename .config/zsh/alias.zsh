@@ -110,7 +110,7 @@ if command -v reflector &>/dev/null; then
 fi
 
 if command -v git &>/dev/null; then
-  alias set_git_url="git config --global url."${github_mirror_url}".insteadOf "https://github.com/""
+  alias set_git_url="git config --global url."${github_mirror_url}".insteadOf "https://github.com""
   alias unset_git_url="git config --global --unset-all url."${github_mirror_url}".insteadOf"
 fi
 
