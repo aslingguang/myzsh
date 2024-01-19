@@ -9,7 +9,7 @@ fi
 
 github_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
 
-github_mirror_url=https://hub.yzuu.cf
+github_mirror_url="${github_mirror_url:-https://hub.yzuu.cf}"
 
 if [ $github_response_code -ne 200 ]; then
   git config --global url."${github_mirror_url}".insteadOf "https://github.com"
@@ -95,7 +95,7 @@ zinit load agkozak/zsh-z
 githubraw_url=https://raw.githubusercontent.com
 githubraw_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://raw.githubusercontent.com)
 if [ $githubraw_response_code -ne 200 ]; then
-  githubraw_url=https://raw.gitmirror.com
+  githubraw_url="${githubraw_mirror_url:-https://raw.gitmirror.com}"
   # githubraw_url=https://raw.fgit.cf/
 fi
 
