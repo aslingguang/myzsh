@@ -116,9 +116,9 @@ if command -v tldr &>/dev/null; then
   fi  
 fi  
 
-if [[ ! -d $HOME/.config/zsh ]]; then
-  mkdir -p $HOME/.config/zsh
-fi  
+if [[ ! -d $HOME/.config/zsh/script ]]; then
+  mkdir -p $HOME/.config/zsh/script
+fi 
 
 if [[ ! -f $HOME/.config/zsh/alias.zsh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
@@ -126,6 +126,11 @@ fi
 
 if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+fi
+
+if [[ ! -f $HOME/.config/zsh/script/package_install.sh ]]; then  
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_install.sh)" > $HOME/.config/zsh/script/package_install.sh
+  chmod +x $HOME/.config/zsh/script/package_install.sh
 fi
 
 if command -v bat &>/dev/null; then
@@ -190,11 +195,13 @@ update_config()
     fi  
   fi  
 
-  if [[ ! -d $HOME/.config/zsh ]]; then
-    mkdir -p $HOME/.config/zsh
+  if [[ ! -d $HOME/.config/zsh/script ]]; then
+    mkdir -p $HOME/.config/zsh/script
   fi  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_install.sh)" > $HOME/.config/zsh/script/package_install.sh
+  chmod +x $HOME/.config/zsh/script/package_install.sh
   
   if command -v bat &>/dev/null; then
     if [[ ! -d $HOME/.config/bat ]]; then
