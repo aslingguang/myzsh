@@ -98,7 +98,7 @@ if [ $githubraw_response_code -ne 200 ]; then
   githubraw_url="${githubraw_mirror_url:-https://raw.gitmirror.com}"
   # githubraw_url=https://raw.fgit.cf/
 fi
-
+myzsh=${githubraw_url}/aslingguang/myzsh/HEAD
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc
 
