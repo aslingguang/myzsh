@@ -23,9 +23,9 @@ load_custom_package_manager()
 		search_command="yay -Ss \${package}"
         install_command="yay -S --noconfirm \${package}"
         query_command="pacman -Qs ^\${package}\\\$"
-    elif [ "$package_manager" == "apt" ]; then
+    elif [ "$package_manager" == "apt" || "$package_manager" == "apt-get" ]; then
         search_command="apt-cache search ^\${package}\\\$ | grep \${package}"
-        install_command="apt install -y \${package}"
+        install_command="apt-get install -y \${package}"
         query_command="dpkg -l \${package} 2>/dev/null"
     elif [ "$package_manager" == "dnf" ]; then
         search_command="dnf repoquery \${package} 2>/dev/null"
@@ -64,9 +64,9 @@ load_default_package_manager()
 		search_command="yay -Ss \${package}"
         install_command="yay -S --noconfirm \${package}"
         query_command="pacman -Qs ^\${package}\\\$"
-    elif command -v apt &>/dev/null; then
+    elif command -v apt-get &>/dev/null; then
         search_command="apt-cache search ^\${package}\\\$ | grep \${package}"
-        install_command="apt install -y \${package}"
+        install_command="apt-get install -y \${package}"
         query_command="dpkg -l \${package} 2>/dev/null"
     elif command -v dnf &>/dev/null; then
         search_command="dnf repoquery \${package} 2>/dev/null"
