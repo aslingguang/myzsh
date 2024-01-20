@@ -107,10 +107,21 @@ search_package()
 {
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [ -n "$package" ]; do
+        # # 跳过以#开头的注释行和空行
+        # if [[ $package =~ ^#.*$|^$ ]]; then
+        #     continue
+        # fi
+        
         # 跳过以#开头的注释行和空行
-        if [[ $package =~ ^#.*$|^$ ]]; then
+        if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
             continue
         fi
+
+        # 去除注释
+        if [[ $package == *"#"* ]]; then
+            package=${package%%#*}
+        fi
+
         # 使用指定包管理器进行软件包搜索
         result=$(eval ${search_command})
 
@@ -131,9 +142,15 @@ install_package()
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [ -n "$package" ]; do
         # 跳过以#开头的注释行和空行
-        if [[ $package =~ ^#.*$|^$ ]]; then
+        if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
             continue
         fi
+
+        # 去除注释
+        if [[ $package == *"#"* ]]; then
+            package=${package%%#*}
+        fi
+        
         # 查询本地是否已安装软件包
         query_result=$(eval ${query_command})
         if [ ! -z "$query_result" ]; then
