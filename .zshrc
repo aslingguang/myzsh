@@ -128,9 +128,9 @@ if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
 fi
 
-if [[ ! -f $HOME/.config/zsh/script/package_install.sh ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_install.sh)" > $HOME/.config/zsh/script/package_install.sh
-  chmod +x $HOME/.config/zsh/script/package_install.sh
+if [[ ! -f $HOME/.config/zsh/script/package_installer.sh ]]; then  
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
+  chmod +x $HOME/.config/zsh/script/package_installer.sh
 fi
 
 if command -v bat &>/dev/null; then
@@ -200,8 +200,8 @@ update_config()
   fi  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_install.sh)" > $HOME/.config/zsh/script/package_install.sh
-  chmod +x $HOME/.config/zsh/script/package_install.sh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
+  chmod +x $HOME/.config/zsh/script/package_installer.sh
   
   if command -v bat &>/dev/null; then
     if [[ ! -d $HOME/.config/bat ]]; then

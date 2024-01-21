@@ -1,6 +1,6 @@
 #!/bin/bash
 
-helpinfo="package-install使用方法
+helpinfo="    package-installer使用方法
     pi [options] [...] <input_file>
     eg: pi -I apt packages or pi -I packages
     -S, --search          批量检索软件包      [选项] [包管理器(可选)]

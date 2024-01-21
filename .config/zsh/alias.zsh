@@ -94,7 +94,7 @@ alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_p
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
 
 if [[ -f $HOME/.config/zsh/script/package_install.sh ]]; then 
-  alias pi="$HOME/.config/zsh/script/package_install.sh"
+  alias pi="$HOME/.config/zsh/script/package_installer.sh"
 fi
 
 if command -v mysql &>/dev/null; then
