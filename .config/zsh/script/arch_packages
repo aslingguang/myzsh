@@ -25,7 +25,7 @@ plocate # 它可以快速定位文件和目录，使用索引加速搜索过程�
 #unzip # 用于解压缩 ZIP 归档文件的命令行工具。
 #pgcli # pgcli是一个用于PostgreSQL数据库的交互式命令行界面工具。
 #mycli # mycli是一个 MySQL 的命令行客户端，可以实现自动补全和语法高亮。MyCli 也可用于 MariaDB 和Percona。
-#http-prompt # HTTP Prompt 是一个交互式的命令行 HTTP 客户端，支持自动完成、语法高亮，基于 HTTPie 和 prompt_toolkit 构建。
-#hyperfine # 替代time,强大的命令行基准测试工具。支持任意 shell 命令、多次运行的统计分析和结果导出。
-#dog # 替代dig,可以用来获取网页内容、查看HTTP请求、查看JSON响应等。
-#zoxide # zoxide是一个用于快速定位文件和目录的命令行工具。
+hyperfine # 替代time,强大的命令行基准测试工具。支持任意 shell 命令、多次运行的统计分析和结果导出。
+dog # 替代dig,可以用来获取网页内容、查看HTTP请求、查看JSON响应等。
+vim # Vim 是一个跨平台的开源文本编辑器。
+#neovim # Neovim 是Vim的一个分支。
