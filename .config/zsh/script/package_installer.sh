@@ -28,19 +28,19 @@ load_custom_package_manager()
         query_command="yay -Qs ^\${package}\\\$"
         uninstall_command="yay -Rns --noconfirm \${package} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "apt" || "$package_manager" == "apt-get" ]]; then
-        search_command="apt-cache search ^\${package}\\\$ | grep \${package}"
+        search_command="apt-cache search ^\${package}\\\$"
         install_command="apt-get install -y \${package} 2>&1 >/dev/null"
         query_command="dpkg -l \${package} 2>/dev/null"
         uninstall_command="apt-get remove -y \${package} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "dnf" ]]; then
         search_command="dnf repoquery \${package} 2>/dev/null"
         install_command="dnf install -y \${package} 2>&1 >/dev/null"
-        query_command="dnf list --installed | grep \${package}"
+        query_command="dnf  list --installed \${package} 2>/dev/null"
         uninstall_command="dnf remove -y \${package} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "yum" ]]; then
         search_command="yum repoquery \${package} 2>/dev/null"
         install_command="yum install -y \${package} 2>&1 >/dev/null"
-        query_command="yum list --installed | grep \${package}"
+        query_command="yum list --installed \${package} 2>/dev/null"
         uninstall_command="yum remove -y \${package} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "apk" ]]; then
         search_command="apk search \${package} | sed -E 's/(-[0-9].*)//' | grep \${package}"
@@ -76,19 +76,19 @@ load_default_package_manager()
         query_command="yay -Qs ^\${package}\\\$"
         uninstall_command="yay -Rns --noconfirm \${package} 2>&1 >/dev/null"
     elif command -v apt-get &>/dev/null; then
-        search_command="apt-cache search ^\${package}\\\$ | grep \${package}"
+        search_command="apt-cache search ^\${package}\\\$"
         install_command="apt-get install -y \${package} 2>&1 >/dev/null"
         query_command="dpkg -l \${package} 2>/dev/null"
         uninstall_command="apt-get remove -y \${package} 2>&1 >/dev/null"
     elif command -v dnf &>/dev/null; then
         search_command="dnf repoquery \${package} 2>/dev/null"
         install_command="dnf install -y \${package} 2>&1 >/dev/null"
-        query_command="dnf list --installed | grep \${package}"
+        query_command="dnf list --installed \${package} 2>/dev/null"
         uninstall_command="dnf remove -y \${package} 2>&1 >/dev/null"
     elif command -v yum &>/dev/null; then
         search_command="yum repoquery \${package} 2>/dev/null"
         install_command="yum install -y \${package} 2>&1 >/dev/null"
-        query_command="yum list --installed | grep \${package}"
+        query_command="yum list --installed \${package} 2>/dev/null"
         uninstall_command="yum remove -y \${package} 2>&1 >/dev/null"
     elif command -v apk &>/dev/null; then
         search_command="apk search \${package} | sed -E 's/(-[0-9].*)//' | grep \${package}"
