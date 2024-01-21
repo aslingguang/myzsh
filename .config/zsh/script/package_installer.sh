@@ -101,6 +101,42 @@ load_default_package_manager()
 	fi
 }
 
+get_package_name()
+{
+    # 跳过以#开头的注释行和空行
+    if [[ $package =~ ^#.*$|^$ ]]; then
+        is_package=false
+        return
+    else
+        is_package=true
+    fi
+
+    # 跳过以#开头的注释行和空行，性能不如上面的方式
+    # if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
+    #     is_package=false
+    #     return
+    # fi
+
+    # 去除注释
+    if [[ $package == *"#"* ]]; then
+        package=${package%%#*}
+    fi
+
+    # 去除字符串两端空格
+    # package=$(echo -e "${package}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//') # 性能不如下面的方式
+    package=${package%%[[:space:]]}
+    package=${package##[[:space:]]}
+
+    if [[ -z "$package" ]]; then
+        is_package=false
+        return
+    else
+        is_package=true
+    fi
+
+    
+}
+
 load_package_manager()
 {
     if [[ -z "$3" && -f "$2" ]]; then
@@ -123,19 +159,12 @@ search_package()
 {
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [[ -n "$package" ]]; do
-        # # 跳过以#开头的注释行和空行
-        # if [[ $package =~ ^#.*$|^$ ]]; then
-        #     continue
-        # fi
-        
-        # 跳过以#开头的注释行和空行
-        if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
+
+        # 获取正确的包名
+        get_package_name
+
+        if [[ $is_package == false ]]; then
             continue
-        fi
-        
-        # 去除注释
-        if [[ $package == *"#"* ]]; then
-            package=${package%%#*}
         fi
         
         # 使用指定包管理器进行软件包搜索
@@ -158,14 +187,12 @@ install_package()
 {
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [[ -n "$package" ]]; do
-        # 跳过以#开头的注释行和空行
-        if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
-            continue
-        fi
 
-        # 去除注释
-        if [[ $package == *"#"* ]]; then
-            package=${package%%#*}
+        # 获取正确的包名
+        get_package_name
+
+        if [[ $is_package == false ]]; then
+            continue
         fi
 
         # 查询本地是否已安装软件包
@@ -206,14 +233,12 @@ uninstall_package()
 {
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [[ -n "$package" ]]; do
-        # 跳过以#开头的注释行和空行
-        if [[ -z "${package}" || ${package:0:1} == "#" ]]; then
-            continue
-        fi
 
-        # 去除注释
-        if [[ $package == *"#"* ]]; then
-            package=${package%%#*}
+        # 获取正确的包名
+        get_package_name
+
+        if [[ $is_package == false ]]; then
+            continue
         fi
         
         # 查询本地是否已安装软件包
