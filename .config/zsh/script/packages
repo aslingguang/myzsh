@@ -9,9 +9,10 @@ dust # dust是一个用于查看磁盘使用情况的工具，以直观的方式
 sd # sd是一个用于在文本中进行替换操作的工具，类似于sed，但具有更友好的语法和交互式的替换体验。
 fd # 一个简单而快速的查找工具，类似于 find 命令。
 jq # 用于处理和分析 JSON 数据的命令行工具。
-eza # 一个替代 ls 命令的现代化的文件列表工具。
+#exa # 一个替代 ls 命令的现代化的文件列表工具。
+eza # 一个由社区维护的exa分支。
 ripgrep # 一个快速的文本搜索工具，类似于 grep 命令。
-# ripgrep-all # 基于ripgrep，支持PDFs, E-Books, Office documents, zip, tar.gz等文件查询。
+#ripgrep-all # 基于ripgrep，支持PDFs, E-Books, Office documents, zip, tar.gz等文件查询。
 fzf # 命令行模糊查找工具，用于快速在大量数据中进行选择或搜索。
 p7zip # 开源的文件压缩和解压缩工具,支持7z、ZIP、RAR、GZIP、BZIP2等压缩格式。
 axel # 多线程下载工具，用于加速文件的下载过程。
@@ -19,11 +20,11 @@ yazi # 一个用 Rust 编写的终端文件管理器，基于非阻塞异步 I/O
 git-delta # 一个 Git 命令行工具，用于美化和改进 git diff 输出的工具，它提供了语法高亮、行号、漂亮的图形和一些额外的功能来改善 Git diff 的显示。
 github-cli # github命令行工具,用于与GitHub进行交互和管理。
 plocate # 它可以快速定位文件和目录，使用索引加速搜索过程，比传统的find和locate命令更快速。
+#shellcheck # shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
 #zip # 用于创建和管理 ZIP 归档文件的命令行工具。
 #unzip # 用于解压缩 ZIP 归档文件的命令行工具。
 #pgcli # pgcli是一个用于PostgreSQL数据库的交互式命令行界面工具。
 #mycli # mycli是一个 MySQL 的命令行客户端，可以实现自动补全和语法高亮。MyCli 也可用于 MariaDB 和Percona。
 #http-prompt # HTTP Prompt 是一个交互式的命令行 HTTP 客户端，支持自动完成、语法高亮，基于 HTTPie 和 prompt_toolkit 构建。
 #hyperfine # 替代time,强大的命令行基准测试工具。支持任意 shell 命令、多次运行的统计分析和结果导出。
-#shellcheck # shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
 #dog # 替代dig,可以用来获取网页内容、查看HTTP请求、查看JSON响应等。
