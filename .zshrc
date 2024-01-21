@@ -110,12 +110,6 @@ if [[ ! -f $HOME/.gitconfig ]]; then
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 fi
 
-if command -v tldr &>/dev/null; then
-  if [[ ! -f $HOME/.tldr_sources ]]; then
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.tldr_sources)" > $HOME/.tldr_sources
-  fi  
-fi  
-
 if [[ ! -d $HOME/.config/zsh/script ]]; then
   mkdir -p $HOME/.config/zsh/script
 fi 
@@ -189,11 +183,6 @@ update_config()
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 
-  if command -v tldr &>/dev/null; then
-    if [[ ! -f $HOME/.tldr_sources ]]; then
-      echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.tldr_sources)" > $HOME/.tldr_sources
-    fi  
-  fi  
 
   if [[ ! -d $HOME/.config/zsh/script ]]; then
     mkdir -p $HOME/.config/zsh/script
@@ -235,10 +224,6 @@ remove_config()
 
   if [[ -d $HOME/.config/bat ]]; then
     rm -rf $HOME/.config/bat
-  fi
-
-  if [[ -f $HOME/.tldr_sources ]]; then
-    rm -f $HOME/.tldr_sources
   fi
 
   if [[ -f $HOME/.p10k.zsh ]]; then

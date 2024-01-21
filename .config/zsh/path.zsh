@@ -49,13 +49,6 @@ if [[ -d "/opt/JetBrains/jetbra/vmoptions" ]]; then
 fi
 # export PATH="$PATH:~/.local/share/gem/ruby/3.0.0/bin"
 
-# tldr清华源
-#export TLDR_SOURCE="https://mirror.tuna.tsinghua.edu.cn/tldr-pages/tldr"
-if command -v tldr &>/dev/null; then  
-  export TLDR_SOURCE_PATHS="$HOME/.tldr_sources"
-fi  
-
-
 [[ ! -d /tmp ]] || export TMPDIR=/tmp
 
 # zoxide配置(快速目录跳转)

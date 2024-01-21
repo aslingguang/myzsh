@@ -18,6 +18,7 @@ axel # 多线程下载工具，用于加速文件的下载过程。
 git-delta # 一个 Git 命令行工具，用于美化和改进 git diff 输出的工具，它提供了语法高亮、行号、漂亮的图形和一些额外的功能来改善 Git diff 的显示。
 gh # github命令行工具,用于与GitHub进行交互和管理。
 mlocate # 它可以快速定位文件和目录，使用索引加速搜索过程，比传统的find和locate命令更快速。
+tealdeer # tldr 的一个基于 Rust 的实现,一个用于提供快速上手指南的工具。
 #shellcheck # shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
 #zip # 用于创建和管理 ZIP 归档文件的命令行工具。
 #unzip # 用于解压缩 ZIP 归档文件的命令行工具。
@@ -25,4 +26,4 @@ mlocate # 它可以快速定位文件和目录，使用索引加速搜索过程�
 #dog # 替代dig,可以用来获取网页内容、查看HTTP请求、查看JSON响应等。
 #zoxide # zoxide是一个用于快速定位文件和目录的命令行工具。
 vim # Vim 是一个跨平台的开源文本编辑器。
-#neovim # Neovim 是Vim的一个分支。
+#neovim # Neovim 是Vim的一个分支。 
