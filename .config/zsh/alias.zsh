@@ -93,7 +93,7 @@ alias proxyw="export https_proxy=http://192.168.0.1:$proxy_port && export http_p
 alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_proxy=http://127.0.0.1:$proxy_port && echo Proxy On"
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
 
-if [[ -f $HOME/.config/zsh/script/package_install.sh ]]; then 
+if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then 
   alias pi="$HOME/.config/zsh/script/package_installer.sh"
 fi
 
