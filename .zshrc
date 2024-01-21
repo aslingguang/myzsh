@@ -114,10 +114,12 @@ if [[ ! -d $HOME/.config/zsh/script ]]; then
   mkdir -p $HOME/.config/zsh/script
 fi 
 
+# 命令别名
 if [[ ! -f $HOME/.config/zsh/alias.zsh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
 fi
 
+# 环境变量
 if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
 fi
@@ -151,12 +153,11 @@ system_info=$(uname -a)
 # p10k主题
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
-# 命令别名
-[[ ! -f $HOME/.config/zsh/alias.zsh ]] || source $HOME/.config/zsh/alias.zsh 
-
-# 环境变量
-[[ ! -f $HOME/.config/zsh/path.zsh ]] || source $HOME/.config/zsh/path.zsh 
-
+for zsh_config in $HOME/.config/zsh/*; do
+  if [[ -f $zsh_config ]]; then
+    source $zsh_config
+  fi
+done
 
 # termux 配置
 if [[ $system_info == *Android* ]]; then
