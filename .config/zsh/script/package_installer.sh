@@ -107,7 +107,7 @@ load_package_manager()
         # 读取输入文件中的软件包名称
         input_file="$2"
         load_default_package_manager
-    elif [[ ! -z "$3" && -f "$3" ]]; then
+    elif [[ -n "$3" && -f "$3" ]]; then
         # 读取输入文件中的软件包名称
         input_file="$3"
         package_manager="$2"
@@ -139,7 +139,7 @@ search_package()
         fi
         
         # 使用指定包管理器进行软件包搜索
-        result=$(eval ${search_command})
+        result=$(eval "${search_command}")
 
         # 检查搜索结果是否为空
         if [[ -z "$result" ]]; then
@@ -169,14 +169,14 @@ install_package()
         fi
 
         # 查询本地是否已安装软件包
-        query_result=$(eval ${query_command})
-        if [[ ! -z "$query_result" ]]; then
+        query_result=$(eval "${query_command}")
+        if [[ -n "$query_result" ]]; then
             echo -e "软件包 $package 已安装\e[0m"
             continue
         fi
 
         # 使用指定包管理器进行软件包搜索
-        search_result=$(eval ${search_command})
+        search_result=$(eval "${search_command}")
         # 检查搜索结果是否为空
         if [[ -z "$search_result" ]]; then
             error_search_results+="\n\e[31m软件包 $package 未找到\e[0m"
@@ -184,7 +184,7 @@ install_package()
         fi
 
         # 安装软件包
-        install_result=$(eval ${install_command})
+        install_result=$(eval "${install_command}")
         if [[ -z "$install_result" ]]; then
             echo -e "\e[32m软件包 $package 安装成功\e[0m"
         else
@@ -193,10 +193,10 @@ install_package()
 
 
     done <"$input_file"
-    if [[ ! -z "$error_search_results" ]]; then
+    if [[ -n "$error_search_results" ]]; then
         echo -e "$error_search_results"
     fi
-    if [[ ! -z "$error_install_results" ]]; then
+    if [[ -n "$error_install_results" ]]; then
         echo -e "$error_install_results"
     fi
 }
@@ -217,14 +217,14 @@ uninstall_package()
         fi
         
         # 查询本地是否已安装软件包
-        query_result=$(eval ${query_command})
+        query_result=$(eval "${query_command}")
         if [[  -z "$query_result" ]]; then
             echo -e "软件包 $package 未安装\e[0m"
             continue
         fi
 
         # 卸载软件包
-        uninstall_result=$(eval ${uninstall_command})
+        uninstall_result=$(eval "${uninstall_command}")
         if [[ -z "$uninstall_result" ]]; then
             echo -e "\e[32m软件包 $package 卸载成功\e[0m"
         else
@@ -232,7 +232,7 @@ uninstall_package()
         fi
 
     done <"$input_file"
-    if [[ ! -z "$error_uninstall_results" ]]; then
+    if [[ -n "$error_uninstall_results" ]]; then
         echo -e "$error_uninstall_results"
     fi
 }
