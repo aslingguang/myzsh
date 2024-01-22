@@ -1,27 +1,29 @@
-git # 版本控制系统，用于跟踪文件的变化并协作开发。
-tig #Tig 是一款命令行下 Git 的可视化工具，可以很方便地在命令行下以交互的方式完成 Git 的各种操作。
-htop # 相对于 Top 命令提供更美观、更方便的进程监控工具。
-bat # 一个类似于 cat 命令的工具，但具有语法高亮和 Git 集成等额外功能。
-fastfetch # 一个轻量级的系统信息显示工具，类似于 neofetch。
-cloc # 用于统计源代码行数的工具。它可以用于统计各种编程语言的源代码行数，包括注释行、空白行等。
-duf # duf 是一个用于查看磁盘使用情况的工具，类似于 df 命令。
-dust # dust是一个用于查看磁盘使用情况的工具，以直观的方式展示磁盘空间的占用情况。
-sd # sd是一个用于在文本中进行替换操作的工具，类似于sed，但具有更友好的语法和交互式的替换体验。
-fd # 一个简单而快速的查找工具，类似于 find 命令。
-jq # 用于处理和分析 JSON 数据的命令行工具。
-#exa # 一个替代 ls 命令的现代化的文件列表工具。
-eza # 一个由社区维护的exa分支。
-ripgrep # 一个快速的文本搜索工具，类似于 grep 命令。
+# #为注释符，每行一个软件包名，可选择在软件包后以空格隔开写入软件包的对应启动命令(eg: git git)。
+# 若包后有启动命令，可使用./package_install.sh -ic packages命令在安装软件时检查软件启动命令是否存在，若存在，则不会安装该包。
+git git # 版本控制系统，用于跟踪文件的变化并协作开发。
+tig tig #Tig 是一款命令行下 Git 的可视化工具，可以很方便地在命令行下以交互的方式完成 Git 的各种操作。
+htop htop # 相对于 Top 命令提供更美观、更方便的进程监控工具。
+bat bat # 一个类似于 cat 命令的工具，但具有语法高亮和 Git 集成等额外功能。
+fastfetch fastfetch # 一个轻量级的系统信息显示工具，类似于 neofetch。
+cloc cloc # 用于统计源代码行数的工具。它可以用于统计各种编程语言的源代码行数，包括注释行、空白行等。
+duf duf # duf 是一个用于查看磁盘使用情况的工具，类似于 df 命令。
+dust dust # dust是一个用于查看磁盘使用情况的工具，以直观的方式展示磁盘空间的占用情况。
+sd sd # sd是一个用于在文本中进行替换操作的工具，类似于sed，但具有更友好的语法和交互式的替换体验。
+fd fd # 一个简单而快速的查找工具，类似于 find 命令。
+jq jq # 用于处理和分析 JSON 数据的命令行工具。
+#exa exa # 一个替代 ls 命令的现代化的文件列表工具。
+eza eza # 一个由社区维护的exa分支。
+ripgrep rg # 一个快速的文本搜索工具，类似于 grep 命令。
 #ripgrep-all # 基于ripgrep，支持PDFs, E-Books, Office documents, zip, tar.gz等文件查询。
-fzf # 命令行模糊查找工具，用于快速在大量数据中进行选择或搜索。
-p7zip # 开源的文件压缩和解压缩工具,支持7z、ZIP、RAR、GZIP、BZIP2等压缩格式。
-axel # 多线程下载工具，用于加速文件的下载过程。
-yazi # 一个用 Rust 编写的终端文件管理器，基于非阻塞异步 I/O。
-git-delta # 一个 Git 命令行工具，用于美化和改进 git diff 输出的工具，它提供了语法高亮、行号、漂亮的图形和一些额外的功能来改善 Git diff 的显示。
-github-cli # github命令行工具,用于与GitHub进行交互和管理。
-plocate # 它可以快速定位文件和目录，使用索引加速搜索过程，比传统的find和locate命令更快速。
+fzf fzf # 命令行模糊查找工具，用于快速在大量数据中进行选择或搜索。
+p7zip 7z # 开源的文件压缩和解压缩工具,支持7z、ZIP、RAR、GZIP、BZIP2等压缩格式。
+axel axel # 多线程下载工具，用于加速文件的下载过程。
+yazi yazi # 一个用 Rust 编写的终端文件管理器，基于非阻塞异步 I/O。
+git-delta delta # 一个 Git 命令行工具，用于美化和改进 git diff 输出的工具，它提供了语法高亮、行号、漂亮的图形和一些额外的功能来改善 Git diff 的显示。
+github-cli gh # github命令行工具,用于与GitHub进行交互和管理。
+plocate plocate # 它可以快速定位文件和目录，使用索引加速搜索过程，比传统的find和locate命令更快速。
 #tldr # man的替代品,一个用于提供快速上手指南的工具。
-tealdeer # man的替代品，tldr 的一个基于 Rust 的实现,一个用于提供快速上手指南的工具。
+tealdeer tldr # man的替代品，tldr 的一个基于 Rust 的实现,一个用于提供快速上手指南的工具。
 #shellcheck # shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
 #zip # 用于创建和管理 ZIP 归档文件的命令行工具。
 #unzip # 用于解压缩 ZIP 归档文件的命令行工具。
