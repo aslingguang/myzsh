@@ -175,6 +175,11 @@ if [[ $system_info == *Android* ]]; then
   if command -v sshd &>/dev/null; then
     sshd
   fi
+
+  if command -v mosh &>/dev/null; then
+    mosh-server &>/dev/null
+  fi
+
 fi
 
 
