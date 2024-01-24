@@ -129,6 +129,11 @@ if [[ ! -f $HOME/.config/zsh/script/package_installer.sh ]]; then
   chmod +x $HOME/.config/zsh/script/package_installer.sh
 fi
 
+if [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/manage_link.sh
+  chmod +x $HOME/.config/zsh/script/manage_link.sh
+fi
+
 if command -v bat &>/dev/null; then
   if [[ ! -d $HOME/.config/bat ]]; then
     mkdir -p $HOME/.config/bat
@@ -197,6 +202,9 @@ update_config()
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
   chmod +x $HOME/.config/zsh/script/package_installer.sh
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/manage_link.sh
+  chmod +x $HOME/.config/zsh/script/manage_link.sh
+
   
   if command -v bat &>/dev/null; then
     if [[ ! -d $HOME/.config/bat ]]; then

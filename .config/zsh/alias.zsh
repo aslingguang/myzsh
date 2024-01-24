@@ -97,6 +97,10 @@ if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then
   alias pi="$HOME/.config/zsh/script/package_installer.sh"
 fi
 
+if [[ -f $HOME/.config/zsh/script/manage_link.sh ]]; then 
+  alias ml="$HOME/.config/zsh/script/manage_link.sh"
+fi
+
 if command -v mysql &>/dev/null; then
   alias sqlr="mysql -u root -p"
 fi
