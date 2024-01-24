@@ -228,6 +228,8 @@ update_config()
     echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   fi
 
+  source "$HOME/.zshrc"
+
 }
 
 remove_config()
