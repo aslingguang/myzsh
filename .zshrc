@@ -9,7 +9,9 @@ fi
 
 github_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
 
+github_mirror_url="https://github.moeyy.xyz/https://github.com"
 github_mirror_url="${github_mirror_url:-https://hub.yzuu.cf}"
+
 
 if [ $github_response_code -ne 200 ]; then
   git config --global url."${github_mirror_url}".insteadOf "https://github.com"

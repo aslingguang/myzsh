@@ -114,7 +114,7 @@ if command -v mount.davfs &>/dev/null; then
 fi
 
 if command -v reflector &>/dev/null; then
-  alias update="sudo reflector --verbose --country 'China' -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist"
+  alias update="sudo reflector --verbose -c China -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist"
 fi
 
 if command -v git &>/dev/null; then
@@ -124,20 +124,27 @@ fi
 
 # windows
 if [[ $system_info == *WSL* ]]; then
-  alias addip="powershell.exe -command 'netsh interface ip add address \"vEthernet (WSL)\" 192.168.0.1 255.255.255.0'"
   alias utools="/mnt/c/Users/LINGGUANG/AppData/Local/Programs/utools/uTools.exe"
-
-  alias cmd="cmd.exe"
   alias winget="winget.exe"
-  alias mklink="cmd.exe /c mklink"
-  alias pwsh="powershell.exe"
-  alias pwshc="powershell.exe -command"
-  alias cmdc="cmd.exe /c"
   alias wsl="wsl.exe"
   alias arch2="/mnt/e/WSL/Arch2/arch2.exe"
   alias pot="/mnt/d/APP/PotPlayer/PotPlayerMini64.exe"
   alias pic="/mnt/d/APP/XnViewMP/xnviewmp.exe"
   alias fm="explorer.exe"
+  if command -v gsudo &>/dev/null; then
+    alias addip="gsudo powershell.exe -command 'netsh interface ip add address \"vEthernet (WSL)\" 192.168.0.1 255.255.255.0'"
+    alias cmd="gsudo cmd.exe"
+    alias mklink="gsudo cmd.exe /c mklink"
+    alias pwsh="gsudo powershell.exe"
+    alias pwshc="gsudo powershell.exe -command"
+    alias cmdc="gsudo cmd.exe /c"
+  else
+    alias cmd="cmd.exe"
+    alias mklink="cmd.exe /c mklink"
+    alias pwsh="powershell.exe"
+    alias pwshc="powershell.exe -command"
+    alias cmdc="cmd.exe /c"  
+  fi  
 fi  
 # v2raya的web界面地址：http://192.168.0.2:2017/
 
