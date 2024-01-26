@@ -1,7 +1,7 @@
 # echo 'root' | sudo -S ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix &> /dev/null
-if [[ $(locale -a 2>/dev/null) == *zh_CN.utf8* ]]; then
-  export LANG="zh_CN.UTF-8"
-  export LC_ALL="zh_CN.UTF-8"
+if [[ $(locale -a 2>/dev/null) == *zh_CN.utf8* && $(tty 2>/dev/null) == *pts* ]]; then
+    export LANG="zh_CN.UTF-8"
+    export LC_ALL="zh_CN.UTF-8"
 fi   
 
 # miniconda3环境变量
