@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+if [[ ! -f ~/.myai_history ]]; then
+    touch ~/.myai_history
+fi
 history -r ~/.myai_history
 # 初始化变量
 previous_input=""
