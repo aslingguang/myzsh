@@ -72,6 +72,7 @@ SAVEHIST=5000
 # 加载 powerlevel10k 主题
 zinit ice depth=1; zinit load romkatv/powerlevel10k
 
+source /mnt/e/linux/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 # zinit light zsh-users/zsh-completions
 zinit load zsh-users/zsh-autosuggestions
 zinit load zdharma/fast-syntax-highlighting
@@ -79,10 +80,10 @@ zinit load zdharma/fast-syntax-highlighting
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
   zsh-users/zsh-completions
 
-if command -v fzf &>/dev/null; then
-  zinit ice lucid wait='1'
-  zinit load aslingguang/fzf-tab-source
-fi
+# if command -v fzf &>/dev/null; then
+#   zinit ice lucid wait='1'
+#   zinit load aslingguang/fzf-tab-source
+# fi
 
 #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
 zinit ice lucid wait='1' atload"[[ $github_response_code -eq 200 ]] || git config --global --unset-all url."${github_mirror_url}".insteadOf"
@@ -128,7 +129,6 @@ fi
 
 if [[ ! -f $HOME/.config/zsh/script/package_installer.sh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
-  chmod +x $HOME/.config/zsh/script/package_installer.sh
 fi
 
 
@@ -184,9 +184,13 @@ if [[ $system_info == *Android* ]]; then
   fi
 elif [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
-  chmod +x $HOME/.config/zsh/script/manage_link.sh
 fi
 
+if (command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]) && [[ ! -f "$HOME/.config/zsh/script/myai.sh" ]]; then 
+  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+fi
+
+chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
 
 update_config()
 {
@@ -201,9 +205,11 @@ update_config()
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
   echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
-  chmod +x $HOME/.config/zsh/script/package_installer.sh
-
+  if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then 
+    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+  fi
   
+
   if command -v bat &>/dev/null; then
     if [[ ! -d $HOME/.config/bat ]]; then
       mkdir -p $HOME/.config/bat
@@ -226,8 +232,9 @@ update_config()
     echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   elif [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
     echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
-    chmod +x $HOME/.config/zsh/script/manage_link.sh
   fi
+  
+  chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
 
   source "$HOME/.zshrc"
 
@@ -287,6 +294,3 @@ remove_config()
   fi
   
 }
-
-
-

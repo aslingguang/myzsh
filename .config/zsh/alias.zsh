@@ -84,8 +84,14 @@ fi
 # alias juicebox="java -jar /opt/juicebox.jar"
 if command -v aichat &>/dev/null; then
   alias ai="aichat"
+  if [[ -f $HOME/.config/zsh/script/myai.sh ]]; then 
+    alias myai="$HOME/.config/zsh/script/myai.sh"
+  fi
 elif [[ -f "$HOME/.config/aichat/aichat" ]]; then
   alias ai="$HOME/.config/aichat/aichat"
+  if [[ -f $HOME/.config/zsh/script/myai.sh ]]; then 
+    alias myai="$HOME/.config/zsh/script/myai.sh"
+  fi
 fi
 
 proxy_port=2080
