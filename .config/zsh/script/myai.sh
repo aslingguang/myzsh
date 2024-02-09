@@ -1,17 +1,17 @@
 #!/usr/bin/bash
 
-if [[ ! -f ~/.myai_history ]]; then
-    touch ~/.myai_history
+if [[ ! -f $HOME/.myai_history ]]; then
+    touch $HOME/.myai_history
 fi
-history -r ~/.myai_history
+history -r $HOME/.myai_history
 # 初始化变量
 previous_input=""
 
 if [[ -n "$1" ]]; then
     previous_input="$1"
-    if ! grep -Fxq "$previous_input" ~/.myai_history; then
+    if ! grep -Fxq "$previous_input" $HOME/.myai_history; then
         history -s ${previous_input}
-        history -a
+        history -w $HOME/.myai_history
     fi
     echo "question: $previous_input"
 fi
@@ -32,7 +32,7 @@ while true; do
         continue
     elif ! grep -Fxq "$input" $HOME/.myai_history; then
         history -s ${input}
-        history -a
+        history -w $HOME/.myai_history
     fi
 
     # 执行命令并获取结果
@@ -79,6 +79,6 @@ while true; do
     
 done
 
-history -w ~/.myai_history
+
 
 
