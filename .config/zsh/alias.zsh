@@ -43,6 +43,7 @@ fi
 if command -v xclip &>/dev/null; then
   alias copy="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
   alias cout="tee /dev/tty  | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
+  alias paste="xclip -selection clipboard -o" # 粘贴剪贴板内容
 fi
 
 alias ..='cd ..' 
@@ -98,6 +99,10 @@ proxy_port=2080
 alias proxyw="export https_proxy=http://192.168.0.1:$proxy_port && export http_proxy=http://192.168.0.1:$proxy_port && echo Proxy On"
 alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_proxy=http://127.0.0.1:$proxy_port && echo Proxy On"
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
+
+if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
+    alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(uploader)s] %(title)s [%(id)s].%(ext)s' "
+fi
 
 if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then 
   alias pi="$HOME/.config/zsh/script/package_installer.sh"
