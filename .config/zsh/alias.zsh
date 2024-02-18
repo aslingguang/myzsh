@@ -101,7 +101,7 @@ alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_p
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
 
 if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
-    alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(uploader)s] %(title)s [%(id)s].%(ext)s' "
+    alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s' "
 fi
 
 if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then 
