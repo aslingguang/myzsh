@@ -118,7 +118,8 @@ elif [[ "$1" == "-c" && -f "$2" ]]; then
 elif [[ "$1" == "-g" ]]; then
     gen_link_config
 else
-    echo "manage_link.sh 用法:"
+    echo "manage_link 用法:"
+    echo "ml [options] <config_file>"
     echo "-m : 生成软链接"
     echo "-r : 删除软链接"
     echo "-c : 检查软链接"
