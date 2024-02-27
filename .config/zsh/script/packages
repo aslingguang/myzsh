@@ -30,6 +30,11 @@ tealdeer tldr # man的替代品，tldr 的一个基于 Rust 的实现,一个用�
 #pgcli # pgcli是一个用于PostgreSQL数据库的交互式命令行界面工具。
 #mycli # mycli是一个 MySQL 的命令行客户端，可以实现自动补全和语法高亮。MyCli 也可用于 MariaDB 和Percona。
 #http-prompt # HTTP Prompt 是一个交互式的命令行 HTTP 客户端，支持自动完成、语法高亮，基于 HTTPie 和 prompt_toolkit 构建。
-#hyperfine # 替代time,强大的命令行基准测试工具。支持任意 shell 命令、多次运行的统计分析和结果导出。
+hyperfine # 替代time,强大的命令行基准测试工具。支持任意 shell 命令、多次运行的统计分析和结果导出。
 #dog # 替代dig,可以用来获取网页内容、查看HTTP请求、查看JSON响应等。
 #zoxide # zoxide是一个用于快速定位文件和目录的命令行工具。
+#aichat aichat # 一个基于ai的命令行工具，可使用chatgpt、localai、qianwen等 apikey。
+atool # 用于处理各种文件归档的命令行工具，如 tar、zip、cpio、deb、rpm 等。它通过提供一个统一的界面，简化了管理压缩文件的过程。
+yt-dlp # 可以从各种流媒体网站（如 YouTube、Vimeo 等）下载视频和播放列表。它是流行的 'youtube-dl' 的一个分支，具有额外的功能和改进。
+ffmpeg # 用于处理音频和视频文件，可以进行转码、剪辑、合并等操作。它是一个跨平台的工具，被广泛用于音视频处理领域。
+xclip # 用于在X服务器中处理剪贴板内容，可以将文本内容复制到剪贴板或从剪贴板中粘贴文本到终端。
