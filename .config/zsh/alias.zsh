@@ -104,8 +104,12 @@ if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
     alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s' "
 fi
 
-if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then 
-  alias pi="$HOME/.config/zsh/script/package_installer.sh"
+if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then
+  if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
+    alias pi="sudo $HOME/.config/zsh/script/package_installer.sh"
+  else
+    alias pi="$HOME/.config/zsh/script/package_installer.sh"
+  fi
 fi
 
 if [[ -f $HOME/.config/zsh/script/manage_link.sh ]]; then 

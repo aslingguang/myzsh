@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ "$(id -u)" -ne 0 ]]; then
-    echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
-    exec sudo "$0" "$@"
-fi
-
 helpinfo="    package-installer使用方法
     pi [options] [...] package1 package2 ... 
     eg: pi -i apt packages or pi -i packages
