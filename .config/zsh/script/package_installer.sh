@@ -222,14 +222,14 @@ uninstall_package()
     get_package_name
 
     if [[ $is_package == false ]]; then
-        continue
+        return
     fi
     
     # 查询本地是否已安装软件包
     query_result=$(eval "${query_command}")
     if [[  -z "$query_result" ]]; then
         echo -e "软件包 $package_name 未安装\e[0m"
-        continue
+        return
     fi
 
     # 卸载软件包
