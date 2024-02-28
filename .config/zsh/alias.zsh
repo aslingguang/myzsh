@@ -105,11 +105,7 @@ if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
 fi
 
 if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then
-  if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
-    alias pi="sudo $HOME/.config/zsh/script/package_installer.sh"
-  else
-    alias pi="$HOME/.config/zsh/script/package_installer.sh"
-  fi
+  alias pi="$HOME/.config/zsh/script/package_installer.sh"
 fi
 
 if [[ -f $HOME/.config/zsh/script/manage_link.sh ]]; then 
