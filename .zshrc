@@ -28,6 +28,12 @@ fi
 
 if [[ -d "/opt" ]]; then
   ZINIT_HOME_DIR="/opt/zsh"
+  if [[ ! -d $ZINIT_HOME_DIR ]]; then
+    if [[ "$(id -u)" -ne 0 ]]; then
+      sudo mkdir -p $ZINIT_HOME_DIR
+      sudo chmod 777 -R $ZINIT_HOME_DIR
+    fi
+  fi
 else
   ZINIT_HOME_DIR="$HOME/.local/share"
 fi

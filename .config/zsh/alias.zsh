@@ -138,7 +138,6 @@ if [[ $system_info == *WSL* ]]; then
   alias utools="/mnt/c/Users/LINGGUANG/AppData/Local/Programs/utools/uTools.exe"
   alias winget="winget.exe"
   alias wsl="wsl.exe"
-  alias arch2="/mnt/e/WSL/Arch2/arch2.exe"
   alias pot="/mnt/d/APP/PotPlayer/PotPlayerMini64.exe"
   alias pic="/mnt/d/APP/XnViewMP/xnviewmp.exe"
   alias fm="explorer.exe"
