@@ -1,3 +1,9 @@
+
+if [[ $(locale -a 2>/dev/null) == *zh_CN.utf8* && $(tty 2>/dev/null) == *pts* ]]; then
+    export LANG="zh_CN.UTF-8"
+    export LC_ALL="zh_CN.UTF-8"
+fi 
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -53,7 +59,6 @@ source "${ZINIT[BIN_DIR]}/zinit.zsh"
 
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-
 
 
 # Load a few important annexes, without Turbo
@@ -161,9 +166,10 @@ system_info=$(uname -a)
 # p10k主题
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
+# 其他配置
 for zsh_config in $HOME/.config/zsh/*; do
-  if [[ -f $zsh_config ]]; then
-    source $zsh_config
+  if [[ -f "$zsh_config" ]]; then
+    source "$zsh_config"
   fi
 done
 
