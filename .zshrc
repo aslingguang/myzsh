@@ -4,6 +4,14 @@ if [[ $(locale -a 2>/dev/null) == *zh_CN.utf8* && $(tty 2>/dev/null) == *pts* ]]
     export LC_ALL="zh_CN.UTF-8"
 fi 
 
+if [[ ! -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+  export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+  export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
+  export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
+  export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+  /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -167,7 +175,7 @@ system_info=$(uname -a)
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
 # 其他配置
-for zsh_config in $HOME/.config/zsh/*; do
+for zsh_config in $HOME/.config/zsh/*.zsh; do
   if [[ -f "$zsh_config" ]]; then
     source "$zsh_config"
   fi

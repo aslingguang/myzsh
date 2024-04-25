@@ -1,5 +1,12 @@
 # 命令快捷方式
-if command -v eza &>/dev/null; then
+if command -v exa &>/dev/null; then
+  alias ls='exa'
+  alias l='exa -lbah --icons'
+  alias la='exa -labgh --icons'
+  alias ll='exa -lbg --icons'
+  alias lsa='exa -lbagR --icons'
+  alias lst='exa -lTabgh --icons' # 输入lst,将展示类似于tree的树状列表。
+elif command -v eza &>/dev/null; then
   alias ls='eza'
   alias l='eza -lbah --icons'
   alias la='eza -labgh --icons'
@@ -135,6 +142,10 @@ fi
 
 # windows
 if [[ $system_info == *WSL* ]]; then
+  # if [[ ! -L "/tmp/.X11-unix" ]]; then
+  #   cat /mnt/e/linux/sudo_passwd | sudo -S rm -rf /tmp/.X11-unix && ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
+  # fi
+  
   alias utools="/mnt/c/Users/LINGGUANG/AppData/Local/Programs/utools/uTools.exe"
   alias winget="winget.exe"
   alias wsl="wsl.exe"

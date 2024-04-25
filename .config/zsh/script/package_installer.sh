@@ -315,7 +315,7 @@ else
     load_default_package_manager
 fi
 
-if [[ -f $package_file ]];then
+if [[ -f "$package_file" ]];then
     # 使用while循环逐行读取文件中的软件包名称
     while IFS= read -r package || [[ -n "$package" ]]; do
         eval "${package_manager_option}"

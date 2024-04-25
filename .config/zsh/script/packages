@@ -14,7 +14,7 @@ jq jq # 用于处理和分析 JSON 数据的命令行工具。
 #exa exa # 一个替代 ls 命令的现代化的文件列表工具。
 eza eza # 一个由社区维护的exa分支。
 ripgrep rg # 一个快速的文本搜索工具，类似于 grep 命令。
-#ripgrep-all # 基于ripgrep，支持PDFs, E-Books, Office documents, zip, tar.gz等文件查询。
+ripgrep-all # 基于ripgrep，支持PDFs, E-Books, Office documents, zip, tar.gz等文件查询。
 fzf fzf # 命令行模糊查找工具，用于快速在大量数据中进行选择或搜索。
 p7zip 7z # 开源的文件压缩和解压缩工具,支持7z、ZIP、RAR、GZIP、BZIP2等压缩格式。
 axel axel # 多线程下载工具，用于加速文件的下载过程。
@@ -38,3 +38,12 @@ atool # 用于处理各种文件归档的命令行工具，如 tar、zip、cpio�
 yt-dlp # 可以从各种流媒体网站（如 YouTube、Vimeo 等）下载视频和播放列表。它是流行的 'youtube-dl' 的一个分支，具有额外的功能和改进。
 ffmpeg # 用于处理音频和视频文件，可以进行转码、剪辑、合并等操作。它是一个跨平台的工具，被广泛用于音视频处理领域。
 xclip # 用于在X服务器中处理剪贴板内容，可以将文本内容复制到剪贴板或从剪贴板中粘贴文本到终端。
+yay
+paru
+openssh
+gcc
+expect
+man-db 
+man-pages-zh_cn 
+man-pages-zh_tw
+wget
