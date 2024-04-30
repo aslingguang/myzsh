@@ -116,11 +116,11 @@ myzsh=${githubraw_url}/aslingguang/myzsh/HEAD
 # https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc
 
 if [[ ! -f $HOME/.p10k.zsh ]]; then
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
 fi  
 
 if [[ ! -f $HOME/.gitconfig ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 fi
 
 if [[ ! -d $HOME/.config/zsh/script ]]; then
@@ -129,16 +129,16 @@ fi
 
 # 命令别名
 if [[ ! -f $HOME/.config/zsh/alias.zsh ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
 fi
 
 # 环境变量
 if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
 fi
 
 if [[ ! -f $HOME/.config/zsh/script/package_installer.sh ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
 fi
 
 
@@ -147,7 +147,7 @@ if command -v bat &>/dev/null; then
     mkdir -p $HOME/.config/bat
   fi
   if [[ ! -f $HOME/.config/bat/config ]]; then
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
   fi
 fi
 
@@ -157,7 +157,7 @@ if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
     mkdir -p $HOME/.config/aichat
   fi
   if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
 fi
 
@@ -181,9 +181,9 @@ if [[ $system_info == *Android* ]]; then
 
   if [[ ! -f $HOME/.termux/termux.properties.bak && -f $HOME/.termux/termux.properties ]]; then
     mv $HOME/.termux/termux.properties $HOME/.termux/termux.properties.bak
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   elif [[ ! -f $HOME/.termux/termux.properties ]]; then
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   fi
 
   if command -v sshd &>/dev/null; then
@@ -193,31 +193,44 @@ if [[ $system_info == *Android* ]]; then
   if command -v mosh &>/dev/null; then
     mosh-server &>/dev/null
   fi
-elif [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
+else
+  # 安装homebrew
+  if [[ ! -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+    export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+    export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
+    export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
+    export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+    /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    brew update
+  fi
+  
+  if [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
+  fi
 fi
 
 if (command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]) && [[ ! -f "$HOME/.config/zsh/script/myai.sh" ]]; then 
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
 fi
 
 chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
 
 update_config()
 {
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
 
 
   if [[ ! -d $HOME/.config/zsh/script ]]; then
     mkdir -p $HOME/.config/zsh/script
   fi  
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
-  echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
+  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
   if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then 
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
   fi
   
 
@@ -225,14 +238,14 @@ update_config()
     if [[ ! -d $HOME/.config/bat ]]; then
       mkdir -p $HOME/.config/bat
     fi
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
   fi
 
   if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
     if [[ ! -d $HOME/.config/aichat ]]; then
       mkdir -p $HOME/.config/aichat
     fi
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
   fi
   
   # 如果是安卓设备，更新termux配置
@@ -240,18 +253,9 @@ update_config()
     if [[ ! -d $HOME/.termux ]]; then
       mkdir -p $HOME/.termux   
     fi 
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
   elif [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
-    echo "$(curl --fail --show-error --silent --location ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
-
-    # 安装homebrew
-    if [[ ! -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-      export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
-      export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
-      export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
-      export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
-      /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"
-    fi
+    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
   fi
   
   chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
@@ -311,6 +315,18 @@ remove_config()
     echo "删除nvim配置及插件"
   else
     echo "保留nvim配置及插件"
+  fi
+
+  if [[ -d "/home/linuxbrew/.linuxbrew/bin" ]]; then
+    echo "是否删除homebrew (y/n): "
+    read choice
+    if [[ $choice == "y" || $choice == "Y" ]]; then
+      /bin/bash -c "$(curl -fsSL ${githubraw_url}/Homebrew/install/HEAD/uninstall.sh)"
+      sudo rm -rf /home/linuxbrew
+      echo "删除homebrew"
+    else
+      echo "保留homebrew"
+    fi
   fi
   
 }
