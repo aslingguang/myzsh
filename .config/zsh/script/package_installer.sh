@@ -1,23 +1,27 @@
 #!/bin/bash
-if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
-    echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
-    exec sudo "$0" "$@"
+if [[ "$@" == *-i* ]]; then
+    system_info=$(uname -a)
+    if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
+        echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
+        exec sudo "$0" "$@"
+    fi
 fi
 
 helpinfo="    package-installer使用方法
     pi [options] [...] package1 package2 ... 
-    eg: pi -i apt packages or pi -i packages
+    eg: pi -m apt -i package_name -f packages_file
     -s                            检索软件包    
     -i                            安装软件包    
     -ic                           安装软件包(检查对应包命令是否存在)    
-    -f, --file <packages_file>     指定软件包列表文件   
+    -f, --file <packages_file>    指定软件包列表文件   
     -r                            卸载软件包    
     -m <package_manager>          指定包管理器
     -h, --help                    帮助信息
     
     软件包列表文件格式说明:
-    #为注释符，每行一个软件包名，可选择在软件包后以空格隔开写入软件包的对应启动命令(eg: git git)。
-    若包后有启动命令，可使用./package_install.sh -ic packages命令在安装软件时检查软件启动命令是否存在，若存在，则不会安装该包。"
+    #为注释符,每行一个软件包名，可选择在软件包后以空格隔开写入软件包的对应启动命令(eg: git git)。
+    若包后有启动命令,可使用./package_install.sh -ic packages命令在安装软件时检查软件启动命令是否存在,若存在,则不会安装该包。
+    支持的包管理器: pacman, paru, yay, apt, dnf, yum, apk, brew"
 
 
 load_custom_package_manager()
@@ -57,6 +61,11 @@ load_custom_package_manager()
         install_command="apk add \${package_name} 2>&1 >/dev/null"
         query_command="apk info \${package_name}"
         uninstall_command="apk del \${package_name} 2>&1 >/dev/null"
+    elif [[ "$package_manager" == "brew" ]]; then
+        search_command="brew search \${package_name} | grep ^\${package_name}\\\$"
+        install_command="brew install \${package_name} 2>&1 >/dev/null"
+        query_command="brew list \${package_name} 2>/dev/null" 
+        uninstall_command="brew uninstall \${package_name} 2>&1 >/dev/null"
     else
         echo -e "\e[31m无法使用包管理器 ${package_manager}\e[0m"
         exit 1
@@ -103,6 +112,11 @@ load_default_package_manager()
         install_command="apk add \${package_name} 2>&1 >/dev/null"
         query_command="apk info \${package_name}"
         uninstall_command="apk del \${package_name} 2>&1 >/dev/null"
+    elif command -v brew &>/dev/null; then
+        search_command="brew search \${package_name} | grep ^\${package_name}\\\$"
+        install_command="brew install \${package_name} 2>&1 >/dev/null"
+        query_command="brew list \${package_name} 2>/dev/null" 
+        uninstall_command="brew uninstall \${package_name} 2>&1 >/dev/null"
     else
         echo -e "\e[31m无法找到默认包管理器,请手动写入包管理器和规则\e[0m"
         exit 1

@@ -166,12 +166,7 @@ system_info=$(uname -a)
 # p10k主题
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
-# 其他配置
-for zsh_config in $HOME/.config/zsh/*.zsh; do
-  if [[ -f "$zsh_config" ]]; then
-    source "$zsh_config"
-  fi
-done
+
 
 # termux 配置
 if [[ $system_info == *Android* ]]; then
@@ -203,12 +198,29 @@ else
     /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     brew update
+  elif [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    # 中科大源
+    export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+    export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
+    export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+    # 清华源
+    # export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+    # export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+    # export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
   fi
   
   if [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
     echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
   fi
 fi
+
+# 其他配置
+for zsh_config in $HOME/.config/zsh/*.zsh; do
+  if [[ -f "$zsh_config" ]]; then
+    source "$zsh_config"
+  fi
+done
 
 if (command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]) && [[ ! -f "$HOME/.config/zsh/script/myai.sh" ]]; then 
   echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
