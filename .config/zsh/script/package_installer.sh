@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "$@" == *-i* ]]; then
+if [[ "$@" == *-i* || "$@" == *-r* ]]; then
     system_info=$(uname -a)
     if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
         echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
@@ -44,7 +44,7 @@ load_custom_package_manager()
     elif [[ "$package_manager" == "apt" || "$package_manager" == "apt-get" ]]; then
         search_command="apt-cache search ^\${package_name}\\\$"
         install_command="apt-get install -y \${package_name} 2>&1 >/dev/null"
-        query_command="dpkg -l \${package_name} 2>/dev/null"
+        query_command="dpkg -L \${package_name} 2>/dev/null"
         uninstall_command="apt-get remove -y \${package_name} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "dnf" ]]; then
         search_command="dnf repoquery \${package_name} 2>/dev/null"
@@ -95,7 +95,7 @@ load_default_package_manager()
     elif command -v apt-get &>/dev/null; then
         search_command="apt-cache search ^\${package_name}\\\$"
         install_command="apt-get install -y \${package_name} 2>&1 >/dev/null"
-        query_command="dpkg -l \${package_name} 2>/dev/null"
+        query_command="dpkg -L \${package_name} 2>/dev/null"
         uninstall_command="apt-get remove -y \${package_name} 2>&1 >/dev/null"
     elif command -v dnf &>/dev/null; then
         search_command="dnf repoquery \${package_name} 2>/dev/null"
