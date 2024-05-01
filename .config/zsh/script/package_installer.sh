@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [[ -n $(grep -Po "\-(ic?|r)(\s|$)" <<< "$@") ]]; then
+if [[ -n $(grep -Po "\s\-(ic?|r)(\s|$)" <<< " $@") ]]; then
     system_info=$(uname -a)
     if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
         echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
         exec sudo "$0" "$@"
     fi
-elif [[ -n $(echo "$@" | grep -Po '\-[^\s]+' | awk '{ if (length($0) > 2) { print length($0); exit} } ') ]]; then
+elif [[ -n $(echo " $@" | grep -Po '\s\-[^\s]+' | awk '{ if (length($0) > 3) { print length($0); exit} } ') ]]; then
     echo "参数错误"
     exit 1
 fi
@@ -15,8 +15,8 @@ helpinfo="    package-installer使用方法
     pi [options] [...] package1 package2 ... 
     eg: pi -m apt -i package_name -f packages_file
     -s                            检索软件包    
-    -i  <package_name>            安装软件包    
-    -ic <package_name>            安装软件包(检查对应包命令是否存在)    
+    -i                            安装软件包    
+    -ic                           安装软件包(检查对应包命令是否存在)    
     -f, --file <packages_file>    指定软件包列表文件   
     -r                            卸载软件包    
     -m <package_manager>          指定包管理器
