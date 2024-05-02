@@ -140,35 +140,6 @@ if command -v git &>/dev/null; then
   alias unset_git_url="git config --global --unset-all url."${github_mirror_url}".insteadOf"
 fi
 
-# windows
-if [[ $system_info == *WSL* ]]; then
-  # if [[ ! -L "/tmp/.X11-unix" ]]; then
-  #   cat /mnt/e/linux/sudo_passwd | sudo -S rm -rf /tmp/.X11-unix && ln -s /mnt/wslg/.X11-unix /tmp/.X11-unix
-  # fi
-  
-  alias utools="/mnt/c/Users/LINGGUANG/AppData/Local/Programs/utools/uTools.exe"
-  alias winget="winget.exe"
-  alias wsl="wsl.exe"
-  alias pot="/mnt/d/APP/PotPlayer/PotPlayerMini64.exe"
-  alias pic="/mnt/d/APP/XnViewMP/xnviewmp.exe"
-  alias fm="explorer.exe"
-  if command -v gsudo &>/dev/null; then
-    alias addip="gsudo powershell.exe -command 'netsh interface ip add address \"vEthernet (WSL)\" 192.168.0.1 255.255.255.0'"
-    alias cmd="gsudo cmd.exe"
-    alias mklink="gsudo cmd.exe /c mklink"
-    alias pwsh="gsudo powershell.exe"
-    alias pwshc="gsudo powershell.exe -command"
-    alias cmdc="gsudo cmd.exe /c"
-  else
-    alias cmd="cmd.exe"
-    alias mklink="cmd.exe /c mklink"
-    alias pwsh="powershell.exe"
-    alias pwshc="powershell.exe -command"
-    alias cmdc="cmd.exe /c"  
-  fi  
-fi  
-# v2raya的web界面地址：http://192.168.0.2:2017/
-
 if command -v thefuck &>/dev/null; then
   eval $(thefuck --alias)
 fi  

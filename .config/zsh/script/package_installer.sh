@@ -1,8 +1,9 @@
 #!/bin/bash
 
+
 if [[ -n $(grep -Po "\s\-(ic?|r)(\s|$)" <<< " $@") ]]; then
     system_info=$(uname -a)
-    if [[ $system_info != *Android* && "$(id -u)" -ne 0 ]]; then
+    if [[ $system_info != *Android* && "$(id -u)" -ne 0 && -z $(grep -Po "\s\-m\s+brew(\s|$)" <<< " $@") ]]; then
         echo -e "\e[31m以非root用户运行。切换到root权限...\e[0m"
         exec sudo "$0" "$@"
     fi
@@ -66,7 +67,7 @@ load_custom_package_manager()
         query_command="apk info \${package_name}"
         uninstall_command="apk del \${package_name} 2>&1 >/dev/null"
     elif [[ "$package_manager" == "brew" ]]; then
-        search_command="brew search \${package_name} | grep ^\${package_name}\\\$"
+        search_command="brew search \${package_name} | grep ^\${package_name}$"
         install_command="brew install \${package_name} 2>&1 >/dev/null"
         query_command="brew list \${package_name} 2>/dev/null" 
         uninstall_command="brew uninstall \${package_name} 2>&1 >/dev/null"
@@ -117,7 +118,7 @@ load_default_package_manager()
         query_command="apk info \${package_name}"
         uninstall_command="apk del \${package_name} 2>&1 >/dev/null"
     elif command -v brew &>/dev/null; then
-        search_command="brew search \${package_name} | grep ^\${package_name}\\\$"
+        search_command="brew search \${package_name} | grep ^\${package_name}$"
         install_command="brew install \${package_name} 2>&1 >/dev/null"
         query_command="brew list \${package_name} 2>/dev/null" 
         uninstall_command="brew uninstall \${package_name} 2>&1 >/dev/null"

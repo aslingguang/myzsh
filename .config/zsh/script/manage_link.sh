@@ -23,6 +23,11 @@ remove_link()
 
 make_link()
 {
+    if [[ -z "$1" || -z "$2" ]]; then
+        echo "参数错误"
+        return
+    fi
+
     if [[ -n "${source_root_dir}" ]]; then
         source_path="${source_root_dir}/$1"
     else
@@ -44,7 +49,18 @@ make_link()
             ln -s ${source_path} ${link_path}
             echo "创建软链接 ${link_path} -> ${source_path}"
         fi   
-    else
+    elif [[ "${source_path: -1}" == "*" ]]; then
+        if [[ -d "${source_path%/*}" ]]; then
+            if [[ ! -d "$link_path" ]]; then
+                mkdir -p "$link_path"
+            fi
+            if [[ -n "$(ln -s ${source_path} ${link_path} 2>/dev/null)" ]]; then
+                echo "创建对应软链接 ${link_path}/* -> ${source_path}"
+            fi
+        else
+            echo "源目录 ${source_path%/*} 不存在"
+        fi
+    else    
         echo "源文件 ${source_path} 不存在"
     fi
 }
@@ -71,8 +87,8 @@ check_file()
 remove_links()
 {
     for link in "${links_array[@]}"; do
-    read -r relative_source_path relative_link_path <<< "$link"
-    remove_link "$relative_link_path"
+        read -r relative_source_path relative_link_path <<< "$link"
+        remove_link "$relative_link_path"
     done
 }
 
@@ -80,8 +96,8 @@ remove_links()
 make_links()
 {
     for link in "${links_array[@]}"; do
-    read -r relative_source_path relative_link_path <<< "$link"
-    make_link "$relative_source_path" "$relative_link_path" 
+        read -r relative_source_path relative_link_path <<< "$link"
+        make_link "$relative_source_path" "$relative_link_path" 
     done
 }
 
@@ -89,8 +105,8 @@ make_links()
 check_links()
 {
     for link in "${links_array[@]}"; do
-    read -r relative_source_path relative_link_path <<< "$link"
-    check_file "$relative_link_path"
+        read -r relative_source_path relative_link_path <<< "$link"
+        check_file "$relative_link_path"
     done
 }
 
