@@ -70,8 +70,8 @@ alias cls="clear"
 # alias cursor="/opt/Cursor-0.1.6.AppImage &>/dev/null &"
 # alias linuxqq="linuxqq &>/dev/null &"
 
-if command -v pacseek &>/dev/null; then
-  alias pk="pacseek"
+if command -v locate &>/dev/null; then
+  alias f="locate"
 fi
 
 if command -v dbeaver &>/dev/null; then

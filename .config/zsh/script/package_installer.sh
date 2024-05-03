@@ -228,7 +228,7 @@ install_package()
     fi
 
     # 安装软件包
-    install_result=$(eval "${install_command}" | grep -Po "error")
+    install_result=$(eval "${install_command}" )
     if [[ -z "$install_result" ]]; then
         echo -e "\e[32m软件包 $package_name 安装成功\e[0m"
     else
