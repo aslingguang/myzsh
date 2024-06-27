@@ -92,14 +92,6 @@ fi
 # alias juicebox="java -jar /opt/juicebox.jar"
 if command -v aichat &>/dev/null; then
   alias ai="aichat"
-  if [[ -f $HOME/.config/zsh/script/myai.sh ]]; then 
-    alias myai="$HOME/.config/zsh/script/myai.sh"
-  fi
-elif [[ -f "$HOME/.config/aichat/aichat" ]]; then
-  alias ai="$HOME/.config/aichat/aichat"
-  if [[ -f $HOME/.config/zsh/script/myai.sh ]]; then 
-    alias myai="$HOME/.config/zsh/script/myai.sh"
-  fi
 fi
 
 proxy_port=2080
@@ -108,6 +100,7 @@ alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_p
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
 
 if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
+    alias ytb='yt-dlp -S tbr --cookies cookies -N 16 --embed-thumbnail -o "[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s"'
     alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s' "
 fi
 

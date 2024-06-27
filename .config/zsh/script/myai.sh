@@ -78,7 +78,3 @@ while true; do
     result=""
     
 done
-
-
-
-

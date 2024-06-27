@@ -8,12 +8,15 @@
 
 remove_link()
 {
-    if [[ -n "${link_root_dir}" ]]; then
-        link_path="${link_root_dir}/$1"
-    else
+    if [[ "${1:0:1}" == "/" ]]; then
         link_path="$1"
+    else
+        if [[ -n "${link_root_dir}" ]]; then
+            link_path="${link_root_dir}/$1"
+        else
+            link_path="$1"
+        fi
     fi
-
     if [[ -h "${link_path}" ]]; then
         rm "${link_path}"
     elif [[ -e "${link_path}" ]]; then
@@ -28,16 +31,24 @@ make_link()
         return
     fi
 
-    if [[ -n "${source_root_dir}" ]]; then
-        source_path="${source_root_dir}/$1"
-    else
+    if [[ "${1:0:1}" == "/" ]]; then
         source_path="$1"
+    else
+        if [[ -n "${source_root_dir}" ]]; then
+            source_path="${source_root_dir}/$1"
+        else
+            source_path="$1"
+        fi
     fi
 
-    if [[ -n "${link_root_dir}" ]]; then
-        link_path="${link_root_dir}/$2"
-    else
+    if [[ "${2:0:1}" == "/" ]]; then
         link_path="$2"
+    else
+        if [[ -n "${link_root_dir}" ]]; then
+            link_path="${link_root_dir}/$2"
+        else
+            link_path="$2"
+        fi
     fi
 
     if [[ -e "${source_path}" ]]; then
@@ -55,7 +66,7 @@ make_link()
                 mkdir -p "$link_path"
             fi
             if [[ -n "$(ln -s ${source_path} ${link_path} 2>/dev/null)" ]]; then
-                echo "创建对应软链接 ${link_path}/* -> ${source_path}"
+                echo "创建对应软链接 ${link_path}/* -> ${source_path}/*"
             fi
         else
             echo "源目录 ${source_path%/*} 不存在"
@@ -67,10 +78,14 @@ make_link()
 
 check_file()
 {
-    if [[ -n "${link_root_dir}" ]]; then
-        link_path="${link_root_dir}/$1"
-    else
+    if [[ "${1:0:1}" == "/" ]]; then
         link_path="$1"
+    else
+        if [[ -n "${link_root_dir}" ]]; then
+            link_path="${link_root_dir}/$1"
+        else
+            link_path="$1"
+        fi
     fi
 
     if [[ -h "${link_path}" ]]; then
