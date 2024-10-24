@@ -48,9 +48,9 @@ if command -v nvim &>/dev/null; then
 fi
 
 if command -v xclip &>/dev/null; then
-  alias copy="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
-  alias cout="tee /dev/tty | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
-  alias pas="xclip -selection clipboard -o" # 粘贴剪贴板内容
+  alias scb="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
+  alias gcbo="tee /dev/tty | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
+  alias gcb="xclip -selection clipboard -o" # 粘贴剪贴板内容
 fi
 
 alias ..='cd ..' 
