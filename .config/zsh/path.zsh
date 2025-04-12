@@ -4,6 +4,10 @@
 #     export LC_ALL="zh_CN.UTF-8"
 # fi   
 
+if [[ -d "/opt/nvim-linux64" ]];then
+    export PATH="/opt/nvim-linux64/bin:$PATH"
+fi
+
 if [[ -d "/opt/miniconda3" ]]; then
     miniconda_path="/opt/miniconda3"
 elif [[ -d "/opt/miniconda" ]]; then

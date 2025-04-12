@@ -43,14 +43,18 @@ if command -v bat &>/dev/null; then
   alias cat='bat -pp'
 fi
 
-if command -v nvim &>/dev/null; then
-  alias vim="nvim"
+#if command -v nvim &>/dev/null; then
+#  alias vim="nvim"
+#fi
+
+if command -v pip &>/dev/null; then
+  alias pipi="pip -i https://pypi.org/simple"
 fi
 
 if command -v xclip &>/dev/null; then
-  alias copy="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
-  alias cout="tee /dev/tty | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
-  alias pas="xclip -selection clipboard -o" # 粘贴剪贴板内容
+  alias scb="xclip -selection c" # 复制内容到剪贴板(屏幕不显示输出)
+  alias gcbo="tee /dev/tty | xclip -selection clipboard" # 复制内容到剪贴板(屏幕显示输出)
+  alias gcb="xclip -selection clipboard -o" # 粘贴剪贴板内容
 fi
 
 alias ..='cd ..' 
@@ -102,6 +106,7 @@ alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
 if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
     alias ytb='yt-dlp -S tbr --cookies cookies -N 16 --embed-thumbnail -o "[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s"'
     alias yt="yt-dlp -f 'bv*+ba' --merge-output-format mp4 --cookies cookies -N 8 --embed-thumbnail -o '[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s' "
+    yb() { yt-dlp -S tbr --cookies cookies -N 16 --embed-thumbnail -o "[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s" "https://www.bilibili.com/video/$1" }
 fi
 
 if [[ -f $HOME/.config/zsh/script/package_installer.sh ]]; then
