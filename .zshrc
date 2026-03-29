@@ -72,11 +72,25 @@ autoload -Uz _zinit
 ### End of Zinit's installer chunk
 
 
-# Lines configured by zsh-newuser-install
+# 历史文件路径（默认即可）
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=5000
-SAVEHIST=5000
-# End of lines configured by zsh-newuser-install
+# 内存中保存的历史条数
+HISTSIZE=50000
+# 写入文件的最大历史条数
+SAVEHIST=50000
+
+# 实时写入历史（关键）：每条命令执行后立即写入文件，而非退出时
+setopt INC_APPEND_HISTORY
+# 追加而非覆盖历史文件
+setopt APPEND_HISTORY
+# 跨所有 Zsh 会话共享历史（可选，多窗口同步）
+setopt SHARE_HISTORY
+
+# 可选：去重、忽略空格开头、记录时间戳
+setopt EXTENDED_HISTORY    # 记录命令时间戳
+setopt HIST_IGNORE_DUPS    # 忽略连续重复命令
+setopt HIST_IGNORE_SPACE   # 不记录以空格开头的命令（隐私）
+setopt HIST_SAVE_NO_DUPS   # 历史文件不存重复命令
 
 
 
@@ -353,3 +367,7 @@ remove_config()
   fi
   
 }
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# OpenClaw Completion
+source "/home/lingguang/.openclaw/completions/openclaw.zsh"

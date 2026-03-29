@@ -41,6 +41,9 @@ fi
 
 if command -v bat &>/dev/null; then
   alias cat='bat -pp'
+elif  command -v batcat &>/dev/null; then
+  alias cat='batcat -pp'
+  alias bat='batcat'
 fi
 
 #if command -v nvim &>/dev/null; then
@@ -98,10 +101,16 @@ if command -v aichat &>/dev/null; then
   alias ai="aichat"
 fi
 
-proxy_port=2080
-alias proxyw="export https_proxy=http://192.168.0.1:$proxy_port && export http_proxy=http://192.168.0.1:$proxy_port && echo Proxy On"
-alias proxy-on="export https_proxy=http://127.0.0.1:$proxy_port && export http_proxy=http://127.0.0.1:$proxy_port && echo Proxy On"
+if [ -z "$proxy_ip" ]; then
+    proxy_ip=127.0.0.1
+fi
+
+if [ -z "$proxy_port" ]; then
+    proxy_port=2080
+fi
+alias proxy-on="export https_proxy=http://$proxy_ip:$proxy_port && export http_proxy=http://$proxy_ip:$proxy_port && echo Proxy On"
 alias proxy-off="unset http_proxy https_proxy && echo Proxy Off"
+alias proxyw="export https_proxy=http://192.168.0.1:$proxy_port && export http_proxy=http://192.168.0.1:$proxy_port && echo Proxy On"
 
 if command -v yt-dlp &>/dev/null && command -v ffmpeg &>/dev/null; then
     alias ytb='yt-dlp -S tbr --cookies cookies -N 16 --embed-thumbnail -o "[%(resolution)s] [%(uploader)s] %(title).50s [%(id)s].%(ext)s"'
@@ -142,7 +151,8 @@ if command -v thefuck &>/dev/null; then
   eval $(thefuck --alias)
 fi  
 
-
+alias update_alias='source ~/.config/zsh/alias.zsh'
+alias update_path='source ~/.config/zsh/path.zsh'
 
 
 
