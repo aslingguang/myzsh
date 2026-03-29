@@ -1,37 +1,79 @@
-
+# ============================================================
+# 语言环境：仅在中文 UTF-8 可用的 pts 终端下设置
+# ============================================================
 if [[ $(locale -a 2>/dev/null) == *zh_CN.utf8* && $(tty 2>/dev/null) == *pts* ]]; then
-    export LANG="zh_CN.UTF-8"
-    export LC_ALL="zh_CN.UTF-8"
-fi 
+  export LANG="zh_CN.UTF-8"
+  export LC_ALL="zh_CN.UTF-8"
+fi
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-
+# ============================================================
+# Powerlevel10k 即时提示（必须在顶部附近）
+# ============================================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# ============================================================
+# 镜像探测：自动选择可用的 GitHub / raw 代理
+# ============================================================
 
-github_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://github.com)
+# 探测单个 URL，返回 HTTP 状态码
+_http_code() { curl -s -o /dev/null -w "%{http_code}" --max-time 2 "$1"; }
 
-github_mirror_url="https://github.moeyy.xyz/https://github.com"
-github_mirror_url="${github_mirror_url:-https://hub.yzuu.cf}"
+# GitHub clone 镜像候选（按优先级排列）
+_GITHUB_MIRRORS=(
+  "https://github.com"
+  "https://mirror.ghproxy.com/https://github.com"
+  "https://ghfast.top/https://github.com"
+  "https://gh-proxy.com/https://github.com"
+)
 
+# raw.githubusercontent.com 镜像候选
+_RAW_MIRRORS=(
+  "https://raw.githubusercontent.com"
+  "https://mirror.ghproxy.com/https://raw.githubusercontent.com"
+  "https://ghfast.top/https://raw.githubusercontent.com"
+)
 
-if [ $github_response_code -ne 200 ]; then
-  git config --global url."${github_mirror_url}".insteadOf "https://github.com"
+# 探测 GitHub 可达性
+github_response_code=$(_http_code "https://github.com")
+
+# 选择可用的 GitHub clone 镜像
+github_mirror_url="https://github.com"
+if [[ $github_response_code -ne 200 ]]; then
+  for _mirror in "${_GITHUB_MIRRORS[@]:1}"; do
+    if [[ $(_http_code "$_mirror/zdharma-continuum/zinit") == 200 ]]; then
+      github_mirror_url="$_mirror"
+      break
+    fi
+  done
+  git config --global url."${github_mirror_url}/".insteadOf "https://github.com/"
 fi
 
+# 选择可用的 raw 内容镜像
+githubraw_url="https://raw.githubusercontent.com"
+if [[ $(_http_code "https://raw.githubusercontent.com") -ne 200 ]]; then
+  for _mirror in "${_RAW_MIRRORS[@]:1}"; do
+    if [[ $(_http_code "${_mirror}/aslingguang/myzsh/HEAD/.zshrc") == 200 ]]; then
+      githubraw_url="$_mirror"
+      break
+    fi
+  done
+fi
+
+# ============================================================
+# Neovim 配置初始化
+# ============================================================
 if command -v nvim &>/dev/null; then
-  # install MyVim-starter
   NVIM_HOME="${NVIM_HOME:-${HOME}/.config/nvim}"
-  if [ ! -d "${NVIM_HOME}" ]; then
+  if [[ ! -d "${NVIM_HOME}" ]]; then
     git clone https://github.com/aslingguang/MyVim-starter.git "${NVIM_HOME}"
   fi
 fi
 
-
+# ============================================================
+# Zinit 插件管理器
+# ============================================================
 if [[ -d "/opt" ]]; then
   ZINIT_HOME_DIR="/opt/zsh"
   if [[ ! -d $ZINIT_HOME_DIR ]]; then
@@ -43,61 +85,50 @@ if [[ -d "/opt" ]]; then
 else
   ZINIT_HOME_DIR="$HOME/.local/share"
 fi
-typeset -A ZINIT=(
-    BIN_DIR  $ZINIT_HOME_DIR/zinit/zinit.git
-    HOME_DIR $ZINIT_HOME_DIR/zinit
-    PLUGINS_DIR $ZINIT_HOME_DIR/zinit/plugins
-    COMPLETIONS_DIR $ZINIT_HOME_DIR/zinit/completions
-    SNIPPETS_DIR $ZINIT_HOME_DIR/zinit/snippets
-    COMPINIT_OPTS -C
-)
 
+typeset -A ZINIT=(
+  BIN_DIR         $ZINIT_HOME_DIR/zinit/zinit.git
+  HOME_DIR        $ZINIT_HOME_DIR/zinit
+  PLUGINS_DIR     $ZINIT_HOME_DIR/zinit/plugins
+  COMPLETIONS_DIR $ZINIT_HOME_DIR/zinit/completions
+  SNIPPETS_DIR    $ZINIT_HOME_DIR/zinit/snippets
+  COMPINIT_OPTS   -C
+)
 ZPFX="$ZINIT_HOME_DIR/zinit/polaris"
-[ ! -d ${ZINIT[BIN_DIR]} ] && mkdir -p "$(dirname ${ZINIT[BIN_DIR]})"
-[ ! -d ${ZINIT[BIN_DIR]}/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
+
+[[ ! -d ${ZINIT[BIN_DIR]} ]] && mkdir -p "$(dirname ${ZINIT[BIN_DIR]})"
+[[ ! -d ${ZINIT[BIN_DIR]}/.git ]] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT[BIN_DIR]}"
 source "${ZINIT[BIN_DIR]}/zinit.zsh"
 
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+zinit light-mode for \
+  zdharma-continuum/zinit-annex-as-monitor \
+  zdharma-continuum/zinit-annex-bin-gem-node \
+  zdharma-continuum/zinit-annex-patch-dl \
+  zdharma-continuum/zinit-annex-rust
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-  zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
-
-### End of Zinit's installer chunk
-
-
-# 历史文件路径（默认即可）
+# ============================================================
+# 历史记录配置
+# ============================================================
 HISTFILE=$HOME/.zsh_history
-# 内存中保存的历史条数
 HISTSIZE=50000
-# 写入文件的最大历史条数
 SAVEHIST=50000
 
-# 实时写入历史（关键）：每条命令执行后立即写入文件，而非退出时
-setopt INC_APPEND_HISTORY
-# 追加而非覆盖历史文件
-setopt APPEND_HISTORY
-# 跨所有 Zsh 会话共享历史（可选，多窗口同步）
-setopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY   # 每条命令立即写入
+setopt APPEND_HISTORY        # 追加而非覆盖
+setopt SHARE_HISTORY         # 多会话共享历史
+setopt EXTENDED_HISTORY      # 记录时间戳
+setopt HIST_IGNORE_DUPS      # 忽略连续重复
+setopt HIST_IGNORE_SPACE     # 忽略空格开头的命令
+setopt HIST_SAVE_NO_DUPS     # 文件中不存重复
 
-# 可选：去重、忽略空格开头、记录时间戳
-setopt EXTENDED_HISTORY    # 记录命令时间戳
-setopt HIST_IGNORE_DUPS    # 忽略连续重复命令
-setopt HIST_IGNORE_SPACE   # 不记录以空格开头的命令（隐私）
-setopt HIST_SAVE_NO_DUPS   # 历史文件不存重复命令
-
-
-
-# 加载 powerlevel10k 主题
+# ============================================================
+# 插件加载
+# ============================================================
 zinit ice depth=1; zinit load romkatv/powerlevel10k
 
-# source /mnt/e/linux/all/gitLib/aslingguang/fzf-tab-source/fzf-tab.plugin.zsh
 if command -v fzf &>/dev/null; then
   zinit ice lucid wait='1'
   zinit load aslingguang/fzf-tab-source
@@ -111,263 +142,203 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
   zsh-users/zsh-completions
 
 #记录访问目录，输z获取,输`z 目录名称`快速跳转(skywind3000/z.lua,rupa/z,zoxide等都不能直接与fzf-tab配合使用 )
+# 在 zsh-z 加载完成后，若 GitHub 不可用的镜像配置完成，则还原
 zinit ice lucid wait='1' atload"[[ $github_response_code -eq 200 ]] || git config --global --unset-all url."${github_mirror_url}".insteadOf"
 zinit load agkozak/zsh-z
-# zinit load skywind3000/z.lua
 
+# ============================================================
+# 下载/更新远程配置文件（仅首次）
+# ============================================================
+myzsh="${githubraw_url}/aslingguang/myzsh/HEAD"
 
+_fetch_config() {
+  # 用法: _fetch_config <远程路径> <本地路径>
+  local content
+  content=$(curl -fsSL "$1" 2>/dev/null)
+  [[ -n "$content" ]] && echo "$content" > "$2"
+}
 
+[[ ! -f $HOME/.p10k.zsh ]]    && _fetch_config "${myzsh}/.p10k.zsh"    "$HOME/.p10k.zsh"
+[[ ! -f $HOME/.gitconfig ]]   && _fetch_config "${myzsh}/.gitconfig"   "$HOME/.gitconfig"
 
-# 下载配置文件
-githubraw_url=https://raw.githubusercontent.com
-githubraw_response_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 1 https://raw.githubusercontent.com)
-if [ $githubraw_response_code -ne 200 ]; then
-  githubraw_url="${githubraw_mirror_url:-https://raw.gitmirror.com}"
-  # githubraw_url=https://raw.fgit.cf/
-fi
-myzsh=${githubraw_url}/aslingguang/myzsh/HEAD
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# https://raw.githubusercontent.com/aslingguang/myzsh/HEAD/.zshrc
+mkdir -p "$HOME/.config/zsh/script"
 
-if [[ ! -f $HOME/.p10k.zsh ]]; then
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
-fi  
-
-if [[ ! -f $HOME/.gitconfig ]]; then  
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
-fi
-
-if [[ ! -d $HOME/.config/zsh/script ]]; then
-  mkdir -p $HOME/.config/zsh/script
-fi 
-
-# 命令别名
-if [[ ! -f $HOME/.config/zsh/alias.zsh ]]; then  
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
-fi
-
-# 环境变量
-if [[ ! -f $HOME/.config/zsh/path.zsh ]]; then  
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
-fi
-
-if [[ ! -f $HOME/.config/zsh/script/package_installer.sh ]]; then  
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
-fi
-
+[[ ! -f $HOME/.config/zsh/alias.zsh ]]  && _fetch_config "${myzsh}/.config/zsh/alias.zsh"  "$HOME/.config/zsh/alias.zsh"
+[[ ! -f $HOME/.config/zsh/path.zsh ]]   && _fetch_config "${myzsh}/.config/zsh/path.zsh"   "$HOME/.config/zsh/path.zsh"
+[[ ! -f $HOME/.config/zsh/script/package_installer.sh ]] && \
+  _fetch_config "${myzsh}/.config/zsh/script/package_installer.sh" "$HOME/.config/zsh/script/package_installer.sh"
 
 if command -v bat &>/dev/null; then
-  if [[ ! -d $HOME/.config/bat ]]; then
-    mkdir -p $HOME/.config/bat
-  fi
-  if [[ ! -f $HOME/.config/bat/config ]]; then
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
-  fi
+  mkdir -p "$HOME/.config/bat"
+  [[ ! -f $HOME/.config/bat/config ]] && _fetch_config "${myzsh}/.config/bat/config" "$HOME/.config/bat/config"
 fi
-
 
 if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
-  if [[ ! -d $HOME/.config/aichat ]]; then
-    mkdir -p $HOME/.config/aichat
-  fi
-  if [[ ! -f $HOME/.config/aichat/roles.yaml ]]; then
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
-  fi
+  mkdir -p "$HOME/.config/aichat"
+  [[ ! -f $HOME/.config/aichat/roles.yaml ]] && \
+    _fetch_config "${myzsh}/.config/aichat/roles.yaml" "$HOME/.config/aichat/roles.yaml"
 fi
 
+# ============================================================
+# 系统信息 & 平台检测
+# ============================================================
 system_info=$(uname -a)
 
-# p10k主题
-[[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
+# p10k 主题
+[[ -f $HOME/.p10k.zsh ]] && source "$HOME/.p10k.zsh"
 
-
-
-# termux 配置
+# ============================================================
+# 平台特定配置
+# ============================================================
 if [[ $system_info == *Android* ]]; then
-  if [[ ! -d $HOME/.termux ]]; then
-      mkdir -p $HOME/.termux   
+  # --- Termux (Android) ---
+  mkdir -p "$HOME/.termux"
+  _termux_props="$HOME/.termux/termux.properties"
+  if [[ ! -f "${_termux_props}.bak" && -f "$_termux_props" ]]; then
+    mv "$_termux_props" "${_termux_props}.bak"
+    _fetch_config "${myzsh}/.termux/termux.properties" "$_termux_props"
+  elif [[ ! -f "$_termux_props" ]]; then
+    _fetch_config "${myzsh}/.termux/termux.properties" "$_termux_props"
   fi
+  command -v sshd &>/dev/null && sshd
+  command -v mosh &>/dev/null && mosh-server &>/dev/null
 
-  if [[ ! -f $HOME/.termux/termux.properties.bak && -f $HOME/.termux/termux.properties ]]; then
-    mv $HOME/.termux/termux.properties $HOME/.termux/termux.properties.bak
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
-  elif [[ ! -f $HOME/.termux/termux.properties ]]; then
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
-  fi
-
-  if command -v sshd &>/dev/null; then
-    sshd
-  fi
-
-  if command -v mosh &>/dev/null; then
-    mosh-server &>/dev/null
-  fi
 else
+  # --- 标准 Linux（非 musl）---
   if [[ -z "$(ldd --version |& grep -Po musl)" ]]; then
-    # 安装homebrew
-    if [[ ! -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+    # Homebrew：使用中科大镜像
+    _brew_bin="/home/linuxbrew/.linuxbrew/bin/brew"
+    _brew_env() {
       export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
       export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
       export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
       export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+    }
+    if [[ ! -f "$_brew_bin" ]]; then
+      _brew_env
       /bin/bash -c "$(curl -fsSL https://mirrors.ustc.edu.cn/misc/brew-install.sh)"
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      eval "$($_brew_bin shellenv)"
       brew update
-    elif [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      # 中科大源
-      export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
-      export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
-      export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
-      # 清华源
-      # export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-      # export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-      # export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
+    elif [[ -f "$_brew_bin" ]]; then
+      eval "$($_brew_bin shellenv)"
+      _brew_env
     fi
   fi
 
-  if [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
-  fi
+  [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]] && \
+    _fetch_config "${myzsh}/.config/zsh/script/manage_link.sh" "$HOME/.config/zsh/script/manage_link.sh"
 fi
 
-# 优先加载自定义配置
+# ============================================================
+# 加载自定义配置（myconfig 目录优先）
+# ============================================================
 if [[ -d "$HOME/.config/zsh/myconfig" ]]; then
-  for zsh_config in $HOME/.config/zsh/myconfig/*.zsh; do
-    if [[ -f "$zsh_config" ]]; then
-      source "$zsh_config"
-    fi
+  for _cfg in "$HOME/.config/zsh/myconfig/"*.zsh(N); do
+    source "$_cfg"
   done
 fi
 
-# 其他配置
-for zsh_config in $HOME/.config/zsh/*.zsh; do
-  if [[ -f "$zsh_config" ]]; then
-    source "$zsh_config"
-  fi
+for _cfg in "$HOME/.config/zsh/"*.zsh(N); do
+  source "$_cfg"
 done
 
-if (command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]) && [[ ! -f "$HOME/.config/zsh/script/myai.sh" ]]; then 
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+# aichat AI 脚本
+if (command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]) && \
+   [[ ! -f "$HOME/.config/zsh/script/myai.sh" ]]; then
+  _fetch_config "${myzsh}/.config/zsh/script/myai.sh" "$HOME/.config/zsh/script/myai.sh"
 fi
 
-chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
+chmod +x -R "$HOME/.config/zsh/script/" 2>/dev/null
 
-update_config()
-{
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.zshrc)" > $HOME/.zshrc
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.p10k.zsh)" > $HOME/.p10k.zsh
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.gitconfig)" > $HOME/.gitconfig
+# ============================================================
+# update_config：强制更新所有远程配置
+# ============================================================
+update_config() {
+  echo "正在从 ${myzsh} 更新配置..."
 
+  _fetch_config "${myzsh}/.zshrc"    "$HOME/.zshrc"
+  _fetch_config "${myzsh}/.p10k.zsh" "$HOME/.p10k.zsh"
+  _fetch_config "${myzsh}/.gitconfig" "$HOME/.gitconfig"
 
-  if [[ ! -d $HOME/.config/zsh/script ]]; then
-    mkdir -p $HOME/.config/zsh/script
-  fi  
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/alias.zsh)" > $HOME/.config/zsh/alias.zsh
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/path.zsh)" > $HOME/.config/zsh/path.zsh
-  echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/package_installer.sh)" > $HOME/.config/zsh/script/package_installer.sh
-  if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then 
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/myai.sh)" > $HOME/.config/zsh/script/myai.sh
+  mkdir -p "$HOME/.config/zsh/script"
+  _fetch_config "${myzsh}/.config/zsh/alias.zsh"  "$HOME/.config/zsh/alias.zsh"
+  _fetch_config "${myzsh}/.config/zsh/path.zsh"   "$HOME/.config/zsh/path.zsh"
+  _fetch_config "${myzsh}/.config/zsh/script/package_installer.sh" \
+                "$HOME/.config/zsh/script/package_installer.sh"
+
+  if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
+    _fetch_config "${myzsh}/.config/zsh/script/myai.sh" "$HOME/.config/zsh/script/myai.sh"
   fi
-  
 
   if command -v bat &>/dev/null; then
-    if [[ ! -d $HOME/.config/bat ]]; then
-      mkdir -p $HOME/.config/bat
-    fi
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/bat/config)" > $HOME/.config/bat/config
+    mkdir -p "$HOME/.config/bat"
+    _fetch_config "${myzsh}/.config/bat/config" "$HOME/.config/bat/config"
   fi
 
   if command -v aichat &>/dev/null || [[ -f "$HOME/.config/aichat/aichat" ]]; then
-    if [[ ! -d $HOME/.config/aichat ]]; then
-      mkdir -p $HOME/.config/aichat
-    fi
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/aichat/roles.yaml)" > $HOME/.config/aichat/roles.yaml
+    mkdir -p "$HOME/.config/aichat"
+    _fetch_config "${myzsh}/.config/aichat/roles.yaml" "$HOME/.config/aichat/roles.yaml"
   fi
-  
-  # 如果是安卓设备，更新termux配置
+
   if [[ $system_info == *Android* ]]; then
-    if [[ ! -d $HOME/.termux ]]; then
-      mkdir -p $HOME/.termux   
-    fi 
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.termux/termux.properties)" > $HOME/.termux/termux.properties
-  elif [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]]; then  
-    echo "$(curl -fsSL ${githubraw_url}/aslingguang/myzsh/HEAD/.config/zsh/script/manage_link.sh)" > $HOME/.config/zsh/script/manage_link.sh
+    mkdir -p "$HOME/.termux"
+    _fetch_config "${myzsh}/.termux/termux.properties" "$HOME/.termux/termux.properties"
+  else
+    [[ ! -f $HOME/.config/zsh/script/manage_link.sh ]] && \
+      _fetch_config "${myzsh}/.config/zsh/script/manage_link.sh" \
+                    "$HOME/.config/zsh/script/manage_link.sh"
   fi
-  
-  chmod +x -R $HOME/.config/zsh/script/ 2>/dev/null
 
+  chmod +x -R "$HOME/.config/zsh/script/" 2>/dev/null
+  echo "配置更新完成，正在重新加载..."
   source "$HOME/.zshrc"
-
 }
 
-remove_config()
-{
-  if [[ -d $HOME/.config/zsh ]]; then
-    rm -rf $HOME/.config/zsh
-  fi
+# ============================================================
+# remove_config：清理所有配置文件
+# ============================================================
+remove_config() {
+  local choice
 
-  if [[ -d $HOME/.config/bat ]]; then
-    rm -rf $HOME/.config/bat
-  fi
-
-  if [[ -f $HOME/.p10k.zsh ]]; then
-    rm -f $HOME/.p10k.zsh
-  fi
-
-  if [[ -f $HOME/.gitconfig ]]; then
-      rm -f $HOME/.gitconfig
-  fi
-
-  if [[ -f $HOME/.zshrc ]]; then
-    rm -f $HOME/.zshrc
-  fi
-  
-  if [[ -f $HOME/.config/aichat/roles.yaml ]]; then
-    rm -f $HOME/.config/aichat/roles.yaml
-  fi
+  rm -rf "$HOME/.config/zsh" "$HOME/.config/bat"
+  rm -f  "$HOME/.p10k.zsh" "$HOME/.gitconfig" "$HOME/.zshrc"
+  rm -f  "$HOME/.config/aichat/roles.yaml"
 
   if [[ $system_info == *Android* ]]; then
-    if [[ -f $HOME/.termux/termux.properties.bak && -f $HOME/.termux/termux.properties ]]; then
-      rm -f $HOME/.termux/termux.properties
-      mv $HOME/.termux/termux.properties.bak $HOME/.termux/termux.properties
+    local props="$HOME/.termux/termux.properties"
+    if [[ -f "${props}.bak" && -f "$props" ]]; then
+      rm -f "$props"
+      mv "${props}.bak" "$props"
     fi
   fi
 
-  echo "是否删除zint插件 (y/n): "
+  echo -n "是否删除 zinit 插件? (y/N): "
   read choice
-  if [[ $choice == "y" || $choice == "Y" ]]; then
-    rm -rf ${ZINIT[HOME_DIR]}
-    echo "删除zint插件"
+  if [[ ${choice:l} == "y" ]]; then
+    rm -rf "${ZINIT[HOME_DIR]}"
+    echo "已删除 zinit 插件"
   else
-    echo "保留zint插件"
+    echo "保留 zinit 插件"
   fi
 
-  echo "是否删除nvim配置 (y/n): "
+  echo -n "是否删除 nvim 配置? (y/N): "
   read choice
-  if [[ $choice == "y" || $choice == "Y" ]]; then
-    rm -rf ${NVIM_HOME}
-    rm -rf $HOME/.local/share/nvim
-    rm -rf $HOME/.local/state/nvim
-    echo "删除nvim配置及插件"
+  if [[ ${choice:l} == "y" ]]; then
+    rm -rf "${NVIM_HOME}" "$HOME/.local/share/nvim" "$HOME/.local/state/nvim"
+    echo "已删除 nvim 配置及插件"
   else
-    echo "保留nvim配置及插件"
+    echo "保留 nvim 配置"
   fi
 
-  if [[ -d "/home/linuxbrew/.linuxbrew/bin" ]]; then
-    echo "是否删除homebrew (y/n): "
+  if [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+    echo -n "是否删除 Homebrew? (y/N): "
     read choice
-    if [[ $choice == "y" || $choice == "Y" ]]; then
+    if [[ ${choice:l} == "y" ]]; then
       /bin/bash -c "$(curl -fsSL ${githubraw_url}/Homebrew/install/HEAD/uninstall.sh)"
       sudo rm -rf /home/linuxbrew
-      echo "删除homebrew"
+      echo "已删除 Homebrew"
     else
-      echo "保留homebrew"
+      echo "保留 Homebrew"
     fi
   fi
-  
 }
-export PATH="$HOME/.npm-global/bin:$PATH"
-
-# OpenClaw Completion
-source "/home/lingguang/.openclaw/completions/openclaw.zsh"

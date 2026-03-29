@@ -44,5 +44,15 @@ fi
 
 [[ ! -d /tmp ]] || export TMPDIR=/tmp
 
+
+if [[ -d "$HOME/.npm-global" ]]; then
+    export PATH="$HOME/.npm-global/bin:$PATH"
+fi
+
+# OpenClaw Completion
+if [[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]]; then
+    source "$HOME/.openclaw/completions/openclaw.zsh"
+fi
+
 # zoxide配置(快速目录跳转)
 # eval "$(z init zsh)"
